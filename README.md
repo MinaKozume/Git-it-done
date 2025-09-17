@@ -12,7 +12,7 @@ This repository is used to collaborate, share code, and track contributions.
 - Milena Nathalie Jacquette|2416866 - MinaKozume   
 - Ramkhalawon Bhimarika Rye|2416454 -
 - Oozeer Muhammad Is-haaq Hussein|2415962 - Borgishq
-- Beegoo Muhammad Farhaan Ally|2416664 - 
+- Beegoo Muhammad Farhaan Ally|2416664 - Farhaanbg
 
 ---
 
