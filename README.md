@@ -42,11 +42,6 @@ experience while streamlining daily operations for business owners.**.
 
 ---
 
-## 📅 Timeline
-Week : Project setup & initial planning
-Week : Core features implementation
-Week : Testing and documentation
-Week : Final review and submission
 
 
 
