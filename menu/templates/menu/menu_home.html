@@ -1,0 +1,24 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>KAFEI — Menu</title>
+  <link rel="stylesheet" href="{% static 'menu/style.css' %}">
+</head>
+<body>
+  <h1>KAFEI — Menu page</h1>
+  <nav>
+    <a href="{% url 'homepage:homepage' %}">Home</a> |
+    <a href="{% url 'menu:menu_home' %}">Menu</a>
+  </nav>
+
+  <ul>
+    {% for item in coffee_items %}
+      <li>{{ item.name }} — ${{ item.price }}</li>
+    {% empty %}
+      <li>No items in the menu yet.</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
