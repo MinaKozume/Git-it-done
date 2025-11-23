@@ -1,56 +1,51 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deals – KAFEI</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% block title %}Deals – KAFEI{% endblock %}
 
-    <style>
-        body { font-family: Arial, sans-serif; }
+{% block content %}
 
-        /* Hero */
-        .hero {
-            background: url('{% static "deals/images/banner_picture.jpeg" %}') center/cover no-repeat;
-            color: white;
-            text-align: center;
-            padding: 200px 20px 150px;
-            position: relative;
-        }
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.3);
-            z-index: 0;
-        }
-        .hero-content { position: relative; z-index: 1; }
+<style>
+    .navbar-custom {
+        position: sticky;
+        top: 0;
+        z-index: 9999;
+    }
+    /* Hero */
+    .hero {
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        background: url('{% static "deals/images/banner_picture.jpeg" %}') center/cover no-repeat;
+        color: white;
+        text-align: center;
+        padding: 200px 20px 150px;
+        position: relative;
+    }
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 0;
+    }
+    .hero-content { position: relative; z-index: 1; }
 
-        /* Deals cards */
-        .deal-card {
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-        .deal-card:hover { transform: translateY(-5px); }
+    /* Deals cards */
+    .deal-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s;
+    }
+    .deal-card:hover { transform: translateY(-5px); }
 
-        .card-img-top {
-            height: 200px;
-            object-fit: cover;
-        }
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
 
-        .btn-dark { background-color: #000; border: none; }
-        .btn-dark:hover { background-color: #333; }
-        .btn-outline-secondary { border-radius: 5px; }
-
-        /* Footer */
-        .footer { border-top: 1px solid #ddd; padding: 20px 0; }
-        .footer a { text-decoration: none; color: #000; }
-    </style>
-</head>
-
-<body>
+    .btn-dark { background-color: #000; border: none; }
+    .btn-dark:hover { background-color: #333; }
+    .btn-outline-secondary { border-radius: 5px; }
+</style>
 
 <!-- HERO SECTION -->
 <section class="hero">
@@ -63,7 +58,7 @@
 </section>
 
 <!-- MAIN DEALS SECTION -->
-<div class="container my-5" id="deals-section">
+<div class="container-fluid my-5 px-5" id="deals-section">
     {% for category, deals in category_deals.items %}
         {% if deals %}
             <h2 class="mb-4">{{ category }}</h2>
@@ -101,13 +96,4 @@
     {% endfor %}
 </div>
 
-<!-- FOOTER -->
-<footer class="footer text-center bg-light">
-    <div class="container">
-        <p>© 2025 KAFEI. All rights reserved.</p>
-    </div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock %}
