@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<body>
+
+<header class="main-header">
+    <nav class="nav-bar">
+        <a href="{% url 'homepage:homepage' %}">Home</a>
+        <a href="{% url 'menu:menu_home' %}">Menu</a>
+        <a href="{% url 'reviews:reviews' %}">Reviews</a>
+        <a href="{% url 'accounts:login' %}">Login</a>
+    </nav>
+</header>
+
+
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+{% if request.path not in '/login/|/signup/|/account/' %}
+<footer>
+    <p>© 2025 KAFEI</p>
+</footer>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+<h1>Welcome {{ request.user.username }}</h1>
+
+<p>Email: {{ request.user.email }}</p>
+
+<h3>Your Favorites</h3>
+<p>{{ profile.favorites }}</p>
+
+<h3>Your Cart</h3>
+<p>{{ profile.cart }}</p>
+
+<a href="{% url 'accounts:edit_profile' %}">Edit Profile</a><br>
+<a href="{% url 'accounts:logout' %}">Logout</a>
