@@ -1,20 +1,88 @@
+{% extends "deals/base.html" %}
 {% load static %}
 
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>KAFEI — Reviews</title>
-  <link rel="stylesheet" href="{% static 'deals/style.css' %}">
-</head>
+{% block title %}Deals - KAFEI{% endblock %}
 
-<body>
-  <h1>Hello from Deals!</h1>
-  <nav>
-    <a href="{% url 'homepage:homepage' %}">Home</a> |
-    <a href="{% url 'menu:menu_home' %}">Menu</a> | 
-    <a href="{% url 'reviews:reviews' %}">Reviews</a> |
-    <a href="{% url 'deals:deals' %}">Deals</a> |
-    <a href="{% url 'about:about' %}">About Us</a>
-  </nav>
-</body>
+{% block hero %}
+<section class="hero" style="position: relative; 
+    background: url('{% static "deals/images/banner_picture.jpeg" %}') center/cover no-repeat; 
+    padding: 200px 20px 150px; color:white;">
+    
+    <!-- Overlay for faint effect -->
+    <div style="position:absolute; inset:0; background: rgba(0,0,0,0.3); z-index:0;"></div>
+
+    <!-- Text on top -->
+    <div style="position:relative; z-index:1; text-align:center;">
+        <h1 class="display-3">KAFEI</h1>
+        <p>Discover our freshest deals and limited edition combos.</p>
+        <a href="#deals-section" class="btn btn-dark mt-3">See Deals</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5" id="deals-section">
+    {% for category, deals in category_deals.items %}
+        {% if deals %}
+            <h2 class="mb-4">{{ category }}</h2>
+            <div class="row g-4 mb-5">
+                {% for deal in deals %}
+                <div class="col-md-4">
+                    <div class="card deal-card h-100 shadow-sm">
+                        {% if deal.image %}
+                        <img src="{{ deal.image.url }}" class="card-img-top" alt="{{ deal.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ deal.title }}</h5>
+                            <p class="card-text">{{ deal.description }}</p>
+                            {% if deal.price_before %}
+                                <p><del>Rs {{ deal.price_before }}</del> <strong>Rs {{ deal.price_after }}</strong></p>
+                            {% else %}
+                                <p><strong>Rs {{ deal.price_after }}</strong></p>
+                            {% endif %}
+                            <a href="#" class="btn btn-dark me-2">Order Now</a>
+                            <a href="#" class="btn btn-outline-secondary">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<style>
+/* Deal cards style */
+.deal-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+.deal-card:hover {
+    transform: translateY(-5px);
+}
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+.btn-dark {
+    background-color: #000;
+    border: none;
+}
+.btn-dark:hover {
+    background-color: #333;
+}
+.btn-outline-secondary {
+    border-radius: 5px;
+}
+.hero h1 {
+    font-size: 4rem;
+}
+.hero p {
+    font-size: 1.5rem;
+}
+</style>
+{% endblock %}
+
+
+
