@@ -1,0 +1,20 @@
+{% load static %}
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>KAFEI — Reviews</title>
+  <link rel="stylesheet" href="{% static 'reviews/style.css' %}">
+</head>
+
+<body>
+  <h1>Hello from About Us!</h1>
+  <nav>
+    <a href="{% url 'homepage:homepage' %}">Home</a> |
+    <a href="{% url 'menu:menu_home' %}">Menu</a> | 
+    <a href="{% url 'reviews:reviews' %}">Reviews</a> |
+    <a href="{% url 'deals:deals' %}">Deals</a> |
+    <a href="{% url 'about:about' %}">About Us</a>
+  </nav>
+</body>
