@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - KAFEI{% endblock %}
+
+{% block content %}
+<div class="container about-us-page">
+    <!-- Customer Service Section -->
+    <div class="row my-5">
+        <!-- Left Column (Message) -->
+        <div class="col-lg-8">
+            <h1><strong>{{ user.username }}</strong> customer service</h1>
+            <p>Hello, we welcome you to <strong>{{ coffee_shop_name }}</strong>.</p>
+            <p>Have a question? Check out our FAQ section at the bottom of the page. If you have a question you cannot find there, please feel free to contact us. We are always happy to help!</p>
+            <p><strong>How to contact us:</strong></p>
+            <ul>
+                <li>Email us at <a href="mailto:coffeeshopname@gmail.com">coffeeshopname@gmail.com</a>. We will respond as quickly as possible.</li>
+                <li>If you prefer to contact us by post, send your questions to: <br>
+                    <em>CoffeeShopName, Customer Service, 67 Bean Street, 405016 Port-Louis</em>
+                </li>
+            </ul>
+            <p>Feel free to follow us on our socials to never miss an update!</p>
+        </div>
+        
+        <!-- Right Column (Images) -->
+        <div class="col-lg-4">
+            <img src="https://via.placeholder.com/400x300.png?text=Image+1" alt="Placeholder Image 1" class="img-fluid mb-3">
+            <img src="https://via.placeholder.com/400x300.png?text=Image+2" alt="Placeholder Image 2" class="img-fluid mb-3">
+            <img src="https://via.placeholder.com/400x300.png?text=Image+3" alt="Placeholder Image 3" class="img-fluid">
+        </div>
+    </div>
+
+    <!-- FAQ and Contact Section -->
+    <div class="row">
+        <!-- FAQ Section -->
+        <div class="col-lg-6">
+            <h3>FAQ Section</h3>
+            <div id="faqAccordion">
+                {% for faq in faqs %}
+                    <div class="card">
+                        <div class="card-header" id="heading{{ forloop.counter }}">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+                                    {{ faq.question }}
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#faqAccordion">
+                            <div class="card-body">
+                                {{ faq.answer }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Contact Us Section -->
+        <div class="col-lg-6">
+            <h3>Contact Us</h3>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<!-- Add extra CSS here if you want specific custom styles -->
+<style>
+    .about-us-page {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+    .about-us-page h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+    .faq-section .card-header {
+        background-color: #f8f9fa;
+        font-size: 1.1rem;
+    }
+    .faq-section .card-body {
+        font-size: 1rem;
+        background-color: #f1f1f1;
+    }
+    .faq-section .btn-link {
+        color: #7a3737;
+        font-size: 1.2rem;
+    }
+</style>
+{% endblock %}
