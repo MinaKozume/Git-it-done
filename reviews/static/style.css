@@ -1,0 +1,32 @@
+.review-carousel-container {
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.review-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    padding: 30px;
+    text-align: center;
+    max-width: 600px;
+    margin: auto;
+}
+
+.review-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.review-rating {
+    color: #ffcc00;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.review-comment {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 15px;
+}

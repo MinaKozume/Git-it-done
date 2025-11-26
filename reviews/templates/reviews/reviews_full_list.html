@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}All Reviews - KAFEI{% endblock %}
+
+{% block content %}
+
+<div style="padding:40px;">
+    <h1>All Reviews</h1>
+
+    {% for r in all_reviews %}
+        <div style="padding:20px; border-bottom:1px solid #ccc; margin-bottom:10px;">
+            <strong>{{ r.name }}</strong> — {{ r.date|date:"d/m/Y" }}
+            <p>{{ r.comment }}</p>
+        </div>
+    {% empty %}
+        <p>No reviews yet.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
