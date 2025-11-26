@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Category, MenuItem
 
 def menu_page(request):
@@ -48,5 +48,10 @@ def menu_page(request):
         "sort_option": sort_option,
         "search_query": search_query,
     })
+
+
+def menu_item_detail(request, item_id):
+    item = get_object_or_404(MenuItem, id=item_id)
+    return render(request, 'menu/menu_item_detail.html', {'item': item})
 
 
