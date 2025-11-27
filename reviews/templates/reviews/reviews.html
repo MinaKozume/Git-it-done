@@ -1,74 +1,120 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block title %}Reviews - KAFEI{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'reviews/style.css' %}">
+{% endblock %}
+
 {% block content %}
-
-<!-- Quote section -->
-<div style="background-color:#6F4A47; color:white; padding:60px 20px; text-align:center;">
-    <h1 style="font-size:36px; font-weight:700;">What our customers think</h1>
-    <p style="max-width:600px; margin:10px auto; font-size:17px;">
-        Do not just take our word for it, see what our amazing customers have to say about us
-    </p>
+<div class="banner-section">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+        <h1>What our customers think</h1>
+        <p>Do not just take our word for it, see what our amazing customers have to say about us</p>
+    </div>
 </div>
 
-<!-- Recent Feedbacks Section -->
-<div style="padding:50px 20px;">
-    <h2 style="margin-bottom:10px;">RECENT FEEDBACKS</h2>
-    <hr style="width:220px; margin:0; border:1px solid #000;">
-    
-    <!-- Review carousel for recent feedbacks -->
-    <div style="display:flex; align-items:center; justify-content:center; margin-top:30px; gap:20px;">
-        <button id="prevBtn" style="border:none; background:none; font-size:24px; cursor:pointer;">&#10094;</button>
+<div class="review-buttons">
+    <a href="{% url 'reviews:add_review' %}" class="btn-review">Leave a review</a>
+    <a href="#recent-feedbacks" class="btn-review">View Reviews</a>
+</div>
 
-        <!-- Carousel wrapper -->
-        <div style="display:flex; overflow:hidden; width:70%; justify-content:center;">
-            <div id="cardsWrapper" style="display:flex; transition:0.3s ease;">
-                {% for r in latest_three %}
-                <div style="min-width:280px; background-color:#7D5552; color:white; padding:20px; border-radius:10px; margin:0 10px;">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div style="width:40px; height:40px; background:#ccc; border-radius:50%;"></div>
-                        <strong>{{ r.name }}</strong>
-                    </div>
-                    <p style="margin-top:15px;">{{ r.comment }}</p>
-                    <p style="text-align:right; opacity:0.8; margin-top:15px;">{{ r.date|date:"d/m/Y" }}</p>
+<div id="recent-feedbacks" class="feedback-section">
+    <h2>RECENT FEEDBACKS</h2>
+    <hr class="feedback-hr">
+
+    <div class="testimonials-counter">
+        <div>Total Reviews: <span>{{ total_reviews }}</span></div>
+        <div>Average Rating: <span>{{ average_rating }} / 5</span></div>
+    </div>
+
+    <button id="prevBtn" class="carousel-btn prev">&#10094;</button>
+    <button id="nextBtn" class="carousel-btn next">&#10095;</button>
+
+    <div class="cards-container">
+        <div id="cardsWrapper" class="cards-wrapper">
+            {% for r in all_reviews %}
+            <div class="review-card {% if forloop.first %}newest-card{% endif %}">
+                <div class="review-header">
+                    <div class="review-avatar"></div>
+                    <strong>{{ r.name }}</strong>
                 </div>
-                {% endfor %}
+                <div class="review-stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= r.rating %}
+                            <span class="star filled">&#9733;</span>
+                        {% else %}
+                            <span class="star">&#9733;</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p class="review-comment">{{ r.comment }}</p>
+                <p class="review-date">{{ r.date|date:"d/m/Y" }}</p>
             </div>
+            {% endfor %}
         </div>
-
-        <button id="nextBtn" style="border:none; background:none; font-size:24px; cursor:pointer;">&#10095;</button>
     </div>
 
-    <!-- View More Reviews Button -->
-    <div style="text-align:center; margin-top:40px;">
-        <a href="{% url 'reviews:reviews_full_list' %}" style="text-decoration:none; color:black; font-size:15px;">
-            View more
-        </a>
+    <div class="see-all-btn">
+        <a href="{% url 'reviews:reviews_full_list' %}" class="btn-review">See All Reviews</a>
+    </div>
+
+    <div class="feedback-quote">
+        “We love our coffee, but we love our customers’ feedback even more!”
     </div>
 </div>
+{% endblock %}
 
-<!-- CTA Section to add a new review -->
-<div style="padding:60px 20px; text-align:center; max-width:700px; margin:auto;">
-    <p style="font-size:15px; margin-bottom:30px;">
-        We would love to hear your thoughts! Your feedback helps us improve your experience.
-    </p>
-    <a href="{% url 'reviews:add_review' %}" style="display:inline-block; background:black; color:white; padding:12px 30px; border-radius:4px; text-decoration:none;">Leave a review</a>
-</div>
-
-<!-- Simple JS Slider Logic -->
+{% block extra_js %}
 <script>
-    const wrapper = document.getElementById('cardsWrapper');
-    let offset = 0;
+const wrapper = document.getElementById('cardsWrapper');
+let offset = 0;
 
-    document.getElementById('nextBtn').onclick = () => {
-        if (offset > -300) offset -= 300;
-        wrapper.style.transform = `translateX(${offset}px)`;
-    };
+// Store original cards
+const originalCards = Array.from(wrapper.children);
+const cardsPerView = 4;
+const totalCards = originalCards.length;
 
-    document.getElementById('prevBtn').onclick = () => {
-        if (offset < 0) offset += 300;
+// Clone only cards AFTER the newest card
+for (let i = 1; i <= cardsPerView; i++) {
+    const index = (i % totalCards);
+    if(index === 0) continue; // skip newest card
+    wrapper.appendChild(originalCards[index].cloneNode(true));
+}
+
+// Calculate card width
+const cardStyle = window.getComputedStyle(wrapper.children[0]);
+const cardWidth = wrapper.children[0].offsetWidth + parseInt(cardStyle.marginRight);
+
+// NEXT
+document.getElementById('nextBtn').onclick = () => {
+    offset -= cardWidth;
+    wrapper.style.transform = `translateX(${offset}px)`;
+    if (Math.abs(offset) >= totalCards * cardWidth) {
+        wrapper.style.transition = "none";
+        offset = 0;
         wrapper.style.transform = `translateX(${offset}px)`;
-    };
+        setTimeout(() => { wrapper.style.transition = "0.5s ease"; }, 20);
+    }
+};
+
+// PREV
+document.getElementById('prevBtn').onclick = () => {
+    if (offset === 0) {
+        wrapper.style.transition = "none";
+        offset = -totalCards * cardWidth;
+        wrapper.style.transform = `translateX(${offset}px)`;
+        setTimeout(() => {
+            wrapper.style.transition = "0.5s ease";
+            offset += cardWidth;
+            wrapper.style.transform = `translateX(${offset}px)`;
+        }, 20);
+    } else {
+        offset += cardWidth;
+        wrapper.style.transform = `translateX(${offset}px)`;
+    }
+};
 </script>
-
 {% endblock %}

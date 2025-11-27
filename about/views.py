@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect  # Added redirect
 from .models import FAQ
 from .forms import ContactUsForm
 
