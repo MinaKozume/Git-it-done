@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.views.generic import TemplateView
 from .forms import SignupForm, EditAccountForm
 
+from django.contrib.auth.views import PasswordChangeDoneView
+
 
 # -------------------------
 # SIGN UP
@@ -119,3 +121,7 @@ def delete_account(request):
 
     return render(request, 'accounts/delete_account.html')
 
+
+# Custom view for password change done
+class CustomPasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = "accounts/password_change_done.html"  # Point to your custom template

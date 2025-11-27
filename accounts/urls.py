@@ -14,15 +14,9 @@ urlpatterns = [
     path("delete/", views.delete_account, name="delete_account"),
 
 
-    path("password_change/", 
-         auth_views.PasswordChangeView.as_view(template_name="registration/password_change.html"), 
-         name="password_change"),
+    path("password_change/", views.change_password, name="password_change"),
+    path("password_change/done/", views.CustomPasswordChangeDoneView.as_view(), name="password_change_done"),  # Custom done view
     
-    path("password_change/done/", 
-         auth_views.PasswordChangeDoneView.as_view(template_name="registration/password_change_done.html"), 
-         name="password_change_done"),
-    
-
 
     path("password_reset/", auth_views.PasswordResetView.as_view(template_name="registration/password_reset.html"), name="password_reset"),
     path("password_reset/done/", auth_views.PasswordResetDoneView.as_view(template_name="registration/password_reset_done.html"), name="password_reset_done"),
