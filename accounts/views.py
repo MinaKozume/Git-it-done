@@ -5,7 +5,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.models import User
-
+from django.views.generic import TemplateView
 from .forms import SignupForm, EditAccountForm
 
 
@@ -95,7 +95,7 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user) 
             messages.success(request, "Password changed successfully.")
-            return redirect("accounts:account_detail")
+            return redirect("accounts:password_change_done")  # Redirect to the custom done page
     else:
         form = PasswordChangeForm(request.user)
 
@@ -118,3 +118,4 @@ def delete_account(request):
             messages.error(request, "Incorrect password. Try again.")
 
     return render(request, 'accounts/delete_account.html')
+
