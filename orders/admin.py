@@ -4,14 +4,29 @@ from .models import Order, OrderItem, BankPaymentDetails, CashPickupDetails
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
+    can_delete = False
+
+    def has_add_permission(self, request, obj):
+        return False
+
 
 class BankDetailsInline(admin.StackedInline):
     model = BankPaymentDetails
     extra = 0
+    can_delete = False
+
+    def has_add_permission(self, request, obj):
+        return False
+
 
 class CashDetailsInline(admin.StackedInline):
     model = CashPickupDetails
     extra = 0
+    can_delete = False
+
+    def has_add_permission(self, request, obj):
+        return False
+
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -19,4 +34,3 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ("payment_method", "status")
     inlines = [OrderItemInline, BankDetailsInline, CashDetailsInline]
 
-admin.site.register(OrderItem)

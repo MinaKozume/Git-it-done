@@ -40,7 +40,7 @@
 
         <div class="mt-3">
             <label class="form-label">Phone number used for transfer</label>
-            <input type="text" name="bank_phone" class="form-control" required>
+            <input type="text" name="bank_phone" class="form-control">
         </div>
 
         <div class="mt-2">
@@ -67,13 +67,27 @@
 </form>
 
 <script>
+const bankPhone = document.querySelector("input[name='bank_phone']");
+const bankNote = document.querySelector("textarea[name='bank_note']");
+const pickupName = document.querySelector("input[name='pickup_name']");
+const pickupPhone = document.querySelector("input[name='pickup_phone']");
+
 document.getElementById("payBank").addEventListener("change", function() {
     document.getElementById("bankSection").style.display = "block";
     document.getElementById("cashSection").style.display = "none";
+
+    bankPhone.required = true;
+    pickupName.required = false;
+    pickupPhone.required = false;
 });
+
 document.getElementById("payCash").addEventListener("change", function() {
     document.getElementById("bankSection").style.display = "none";
     document.getElementById("cashSection").style.display = "block";
+
+    bankPhone.required = false;
+    pickupName.required = true;
+    pickupPhone.required = true;
 });
 </script>
 
