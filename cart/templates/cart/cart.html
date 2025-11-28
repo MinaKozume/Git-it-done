@@ -36,7 +36,7 @@
 
     <div class="text-end mt-4">
         <h4>Total: ${{ total }}</h4>
-        <button class="btn btn-dark mt-3" disabled>Checkout (Coming Soon)</button>
+        <a href="{% url 'orders:checkout' %}" class="btn btn-dark mt-3">Proceed to Checkout</a>
     </div>
 
 </div>
