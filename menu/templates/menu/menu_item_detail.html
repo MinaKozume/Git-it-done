@@ -26,7 +26,11 @@
             <p>{{ item.description }}</p>
             <p><strong>Price: Rs {{ item.price }}</strong></p>
             <div>
-                <button class="btn btn-primary">Add to Cart</button>
+                <form action="{% url 'cart:add_to_cart' item.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-dark mt-3">Add to Cart</button>
+                </form>
+
                 <a href="{% url 'menu:menu_home' %}" class="btn btn-secondary">Go Back</a>
             </div>
         </div>

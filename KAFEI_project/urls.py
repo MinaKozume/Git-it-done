@@ -10,9 +10,8 @@ urlpatterns = [
     path('reviews/', include('reviews.urls')),
     path('deals/', include('deals.urls')),
     path('about/', include('about.urls')),
-    # Add namespace here
     path("accounts/", include(("accounts.urls", "accounts"), namespace="accounts")),
-
+    path("cart/", include("cart.urls")),
 ]
 
 if settings.DEBUG:

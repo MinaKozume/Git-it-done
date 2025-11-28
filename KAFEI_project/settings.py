@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'accounts',
     'cart',
     'favorites',
+    'checkout',
 ]
 
 MIDDLEWARE = [
@@ -92,12 +93,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # Login URLs
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'accounts:account_detail'
 LOGOUT_REDIRECT_URL = 'homepage:homepage'
-
 
 # Email Backend
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

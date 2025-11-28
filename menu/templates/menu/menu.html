@@ -150,7 +150,10 @@
                         <p class="fw-bold">Rs {{ item.price }}</p>
                     </div>
                     <div>
-                        <button class="btn btn-primary mb-1">Add to Cart</button>
+                        <form action="{% url 'cart:add_to_cart' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-dark mt-2">Add to Cart</button>
+                        </form>
                         <a href="{% url 'menu:menu_item_detail' item_id=item.id %}" class="btn btn-secondary">View Details</a>
                     </div>
                 </div>
@@ -175,7 +178,11 @@
                         <p class="fw-bold">Rs {{ item.price }}</p>
                     </div>
                     <div>
-                        <button class="btn btn-primary mb-1">Add to Cart</button>
+                        <form action="{% url 'cart:add_to_cart' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-dark mt-2">Add to Cart</button>
+                        </form>
+
                         <a href="{% url 'menu:menu_item_detail' item_id=item.id %}" class="btn btn-secondary">View Details</a>
                     </div>
                 </div>
