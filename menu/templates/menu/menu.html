@@ -1,0 +1,204 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KAFEI — Menu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Horizontal scroll container */
+        .scroll-container {
+            display: flex;
+            flex-wrap: wrap; /* allows multiple rows if needed */
+            gap: 15px;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Standardized card size */
+        .scroll-item {
+            flex: 1 1 calc(25% - 15px); /* max 4 items per row */
+            min-width: 200px;
+            max-width: 250px;
+        }
+
+        .scroll-item .card {
+            height: 360px; /* standard card height */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scroll-item .card-img-top {
+            height: 180px; /* fixed image height */
+            object-fit: cover;
+        }
+
+        .scroll-item .card-body {
+            flex: 1; /* fill remaining space */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* buttons at bottom */
+        }
+
+        /* Truncate descriptions to max 3 lines */
+        .scroll-item p {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; 
+            -webkit-box-orient: vertical;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HERO BANNER -->
+<div class="text-white text-center" style="
+    background-image: url('{% static '\menu\images\coffee_brewing_methods-1.jpg' %}');
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+">
+    <h1 class="fw-bold">Brewed Fresh. Served with Love.</h1>
+    <a href="#menu-section" class="btn btn-light mt-3">View Menu</a>
+</div>
+
+<!-- FILTERS & SEARCH -->
+<div class="container my-4">
+    <form method="get" class="row g-2 align-items-center">
+        <div class="col-md-3">
+            <select name="category" class="form-select">
+                <option value="all">All Categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="price" class="form-select">
+                <option value="">All Prices</option>
+                <option value="lt100" {% if price_filter == 'lt100' %}selected{% endif %}>Less than Rs 100</option>
+                <option value="100to200" {% if price_filter == '100to200' %}selected{% endif %}>Rs 100 - Rs 200</option>
+                <option value="gt200" {% if price_filter == 'gt200' %}selected{% endif %}>More than Rs 200</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="sort" class="form-select">
+                <option value="">Sort By</option>
+                <option value="price_asc" {% if sort_option == 'price_asc' %}selected{% endif %}>Price Low → High</option>
+                <option value="price_desc" {% if sort_option == 'price_desc' %}selected{% endif %}>Price High → Low</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <input type="text" name="search" value="{{ search_query }}" class="form-control" placeholder="Search...">
+        </div>
+
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
+</div>
+
+<!-- CATEGORY PREVIEW -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Categories</h2>
+    <div class="row text-center">
+        {% for cat in categories %}
+        <div class="col-6 col-md-3 mb-4">
+            <a href="#cat-{{ cat.id }}" class="text-decoration-none text-dark">
+                <div class="card">
+                    {% if cat.image %}
+                        <img src="{{ cat.image.url }}" class="card-img-top" style="height: 120px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body p-2">
+                        <h6>{{ cat.name }}</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- MAIN MENU -->
+<div class="container" id="menu-section">
+    {% for category, items in items_by_category.items %}
+        <h3 id="cat-{{ category.id }}" class="mt-5">{{ category.name }}</h3>
+
+        <!-- Visible first 4 items -->
+        <div class="scroll-container" id="scroll-{{ category.id }}">
+            {% for item in items|slice:":4" %}
+            <div class="card scroll-item">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img-top">
+                {% endif %}
+                <div class="card-body">
+                    <div>
+                        <h5>{{ item.name }}</h5>
+                        <p>{{ item.description }}</p>
+                        <p class="fw-bold">Rs {{ item.price }}</p>
+                    </div>
+                    <div>
+                        <form action="{% url 'cart:add_to_cart' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-dark mt-2">Add to Cart</button>
+                        </form>
+                        <a href="{% url 'menu:menu_item_detail' item_id=item.id %}" class="btn btn-secondary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if items|length > 4 %}
+        <button class="btn btn-link mt-2" onclick="showAll('{{ category.id }}')">See All</button>
+
+        <!-- Hidden extra items -->
+        <div class="scroll-container d-none mt-3" id="all-items-{{ category.id }}">
+            {% for item in items|slice:"4:" %}
+            <div class="card scroll-item">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img-top">
+                {% endif %}
+                <div class="card-body">
+                    <div>
+                        <h5>{{ item.name }}</h5>
+                        <p>{{ item.description }}</p>
+                        <p class="fw-bold">Rs {{ item.price }}</p>
+                    </div>
+                    <div>
+                        <form action="{% url 'cart:add_to_cart' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-dark mt-2">Add to Cart</button>
+                        </form>
+
+                        <a href="{% url 'menu:menu_item_detail' item_id=item.id %}" class="btn btn-secondary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<script>
+function showAll(catId) {
+    const allItems = document.getElementById('all-items-' + catId);
+    allItems.classList.toggle('d-none');
+}
+</script>
+
+</body>
+</html>

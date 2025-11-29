@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Order Successful{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h2>Your order has been placed!</h2>
+    <p>We will contact you soon.</p>
+    <a href="{% url 'menu:menu_home' %}" class="btn btn-dark mt-3">Back to Menu</a>
+</div>
+{% endblock %}
