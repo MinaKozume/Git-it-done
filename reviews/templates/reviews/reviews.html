@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Reviews - KAFEI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'reviews/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="banner-section">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+        <h1>What our customers think</h1>
+        <p>Do not just take our word for it, see what our amazing customers have to say about us</p>
+    </div>
+</div>
+
+<div class="review-buttons">
+    <a href="{% url 'reviews:add_review' %}" class="btn-review">Leave a review</a>
+    <a href="#recent-feedbacks" class="btn-review">View Reviews</a>
+</div>
+
+<div id="recent-feedbacks" class="feedback-section">
+    <h2>RECENT FEEDBACKS</h2>
+    <hr class="feedback-hr">
+
+    <div class="testimonials-counter">
+        <div>Total Reviews: <span>{{ total_reviews }}</span></div>
+        <div>Average Rating: <span>{{ average_rating }} / 5</span></div>
+    </div>
+
+    <button id="prevBtn" class="carousel-btn prev">&#10094;</button>
+    <button id="nextBtn" class="carousel-btn next">&#10095;</button>
+
+    <div class="cards-container">
+        <div id="cardsWrapper" class="cards-wrapper">
+            {% for r in all_reviews %}
+            <div class="review-card {% if forloop.first %}newest-card{% endif %}">
+                <div class="review-header">
+                    <div class="review-avatar"></div>
+                    <strong>{{ r.name }}</strong>
+                </div>
+                <div class="review-stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= r.rating %}
+                            <span class="star filled">&#9733;</span>
+                        {% else %}
+                            <span class="star">&#9733;</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p class="review-comment">{{ r.comment }}</p>
+                <p class="review-date">{{ r.date|date:"d/m/Y" }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="see-all-btn">
+        <a href="{% url 'reviews:reviews_full_list' %}" class="btn-review">See All Reviews</a>
+    </div>
+
+    <div class="feedback-quote">
+        “We love our coffee, but we love our customers’ feedback even more!”
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const wrapper = document.getElementById('cardsWrapper');
+let offset = 0;
+
+// Store original cards
+const originalCards = Array.from(wrapper.children);
+const cardsPerView = 4;
+const totalCards = originalCards.length;
+
+// Clone only cards AFTER the newest card
+for (let i = 1; i <= cardsPerView; i++) {
+    const index = (i % totalCards);
+    if(index === 0) continue; // skip newest card
+    wrapper.appendChild(originalCards[index].cloneNode(true));
+}
+
+// Calculate card width
+const cardStyle = window.getComputedStyle(wrapper.children[0]);
+const cardWidth = wrapper.children[0].offsetWidth + parseInt(cardStyle.marginRight);
+
+// NEXT
+document.getElementById('nextBtn').onclick = () => {
+    offset -= cardWidth;
+    wrapper.style.transform = `translateX(${offset}px)`;
+    if (Math.abs(offset) >= totalCards * cardWidth) {
+        wrapper.style.transition = "none";
+        offset = 0;
+        wrapper.style.transform = `translateX(${offset}px)`;
+        setTimeout(() => { wrapper.style.transition = "0.5s ease"; }, 20);
+    }
+};
+
+// PREV
+document.getElementById('prevBtn').onclick = () => {
+    if (offset === 0) {
+        wrapper.style.transition = "none";
+        offset = -totalCards * cardWidth;
+        wrapper.style.transform = `translateX(${offset}px)`;
+        setTimeout(() => {
+            wrapper.style.transition = "0.5s ease";
+            offset += cardWidth;
+            wrapper.style.transform = `translateX(${offset}px)`;
+        }, 20);
+    } else {
+        offset += cardWidth;
+        wrapper.style.transform = `translateX(${offset}px)`;
+    }
+};
+</script>
+{% endblock %}

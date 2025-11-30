@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}My Account – KAFEI{% endblock %}
+
+{% block content %}
+<h2 class="mt-5">My Account</h2>
+
+<div class="mt-4">
+    <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+</div>
+
+
+<a href="{% url 'accounts:edit_account' %}" class="btn btn-dark mt-3">Edit Profile</a>
+<a href="{% url 'accounts:password_change' %}" class="btn btn-secondary mt-3">Change Password</a>
+<a href="{% url 'accounts:delete_account' %}" class="btn btn-danger mt-3">Delete Account</a>
+
+<form method="POST" action="{% url 'accounts:logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger mt-3">Logout</button>
+</form>
+
+
+{% endblock %}

@@ -1,0 +1,236 @@
+[33mcommit 1f1b17c9d4fde9d2a2b9b3ee5e7c60c3fc89be20[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdeals-page[m[33m)[m
+Author: Ritika Sewnarain <your_email@example.com>
+Date:   Sun Nov 23 16:11:27 2025 +0400
+
+    Update deals.html
+
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mindex 50c3cbb..1aa2894 100644[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -1,19 +1,55 @@[m
+[31m-# Python[m
+[31m-*.pyc[m
+[32m+[m[32m# --- VSCode ---[m
+[32m+[m[32m.vscode/[m
+[32m+[m
+[32m+[m[32m# --- Python ---[m
+ __pycache__/[m
+[32m+[m[32m*.py[cod][m
+[32m+[m[32m*.pyo[m
+[32m+[m[32m*.pyd[m
+[32m+[m[32m*.pdb[m
+[32m+[m[32m*.egg-info/[m
+[32m+[m[32m*.egg[m
+[32m+[m[32m*.whl[m
+[32m+[m
+[32m+[m[32m# --- Virtual Environment ---[m
+[32m+[m[32mvenv/[m
+[32m+[m[32menv/[m
+[32m+[m[32m.venv/[m
+[32m+[m[32mENV/[m
+ [m
+[31m-# Django[m
+[32m+[m[32m# --- Django ---[m
+ db.sqlite3[m
+[31m-/media/[m
+[32m+[m[32mstaticfiles/[m
+[32m+[m[32mmedia/[m
+[32m+[m[32m*.log[m
+ [m
+[31m-# Environment[m
+[31m-venv/[m
+[31m-.env[m
+[32m+[m[32m# Django cache[m
+[32m+[m[32m*.cache[m
+[32m+[m[32m.cache/[m
+[32m+[m[32m*.pytest_cache/[m
+ [m
+[31m-# IDEs[m
+[31m-.vscode/[m
+[31m-*.idea/[m
+[32m+[m[32m# Migrations (keep only the __init__.py)[m
+[32m+[m[32m*/migrations/__pycache__/[m
+[32m+[m[32m*/migrations/*.py[m
+[32m+[m[32m!*/migrations/__init__.py[m
+[32m+[m
+[32m+[m[32m# --- Environment variables ---[m
+[32m+[m[32m.env[m
+[32m+[m[32m.env.local[m
+[32m+[m[32m.env.*.local[m
+ [m
+[31m-# System files[m
+[32m+[m[32m# --- OS / Editor junk ---[m
+ .DS_Store[m
+ Thumbs.db[m
+[32m+[m
+[32m+[m[32m# --- OneDrive important junk (since you use OneDrive) ---[m
+[32m+[m[32m~$*[m
+[32m+[m[32m*.tmp[m
+[32m+[m[32m*.tmp.*[m
+[32m+[m[32m*.sbstore[m
+[32m+[m[32mOneDrive*/[m
+[32m+[m
+[32m+[m[32m# --- Python build ---[m
+[32m+[m[32mbuild/[m
+[32m+[m[32mdist/[m
+[41m+[m
+[1mdiff --git a/deals/__pycache__/urls.cpython-312.pyc b/deals/__pycache__/urls.cpython-312.pyc[m
+[1mindex 6655217..c7edba6 100644[m
+Binary files a/deals/__pycache__/urls.cpython-312.pyc and b/deals/__pycache__/urls.cpython-312.pyc differ
+[1mdiff --git a/deals/templates/deals/base.html b/deals/templates/deals/base.html[m
+[1mdeleted file mode 100644[m
+[1mindex 107639d..0000000[m
+[1m--- a/deals/templates/deals/base.html[m
+[1m+++ /dev/null[m
+[36m@@ -1,136 +0,0 @@[m
+[31m-{% load static %}[m
+[31m-<!DOCTYPE html>[m
+[31m-<html lang="en">[m
+[31m-<head>[m
+[31m-    <meta charset="UTF-8">[m
+[31m-    <meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+[31m-    <title>{% block title %}KAFEI{% endblock %}</title>[m
+[31m-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">[m
+[31m-    <style>[m
+[31m-        /* General Styles */[m
+[31m-        body { font-family: Arial, sans-serif; }[m
+[31m-[m
+[31m-        /* Sidebar */[m
+[31m-        .sidebar {[m
+[31m-            width: 220px;[m
+[31m-            height: 100vh;[m
+[31m-            position: fixed;[m
+[31m-            top: 0;[m
+[31m-            left: 0;[m
+[31m-            background-color: #f8f9fa;[m
+[31m-            padding: 20px;[m
+[31m-            display: flex;[m
+[31m-            flex-direction: column;[m
+[31m-            align-items: flex-start;[m
+[31m-            border-right: 1px solid #ddd;[m
+[31m-        }[m
+[31m-        .sidebar .navbar-brand {[m
+[31m-            font-size: 1.8rem;[m
+[31m-            font-weight: bold;[m
+[31m-            margin-bottom: 2rem;[m
+[31m-        }[m
+[31m-        .sidebar .nav-link {[m
+[31m-            font-size: 1.1rem;[m
+[31m-            color: #000;[m
+[31m-            margin-bottom: 0.75rem;[m
+[31m-            transition: background 0.3s, color 0.3s;[m
+[31m-        }[m
+[31m-        .sidebar .nav-link:hover {[m
+[31m-            background-color: #e0e0e0;[m
+[31m-            border-radius: 8px;[m
+[31m-            color: #000;[m
+[31m-        }[m
+[31m-        .sidebar .btn-dark {[m
+[31m-            width: 100%;[m
+[31m-            margin-top: 1.5rem;[m
+[31m-            border-radius: 8px;[m
+[31m-        }[m
+[31m-[m
+[31m-        /* Hero section (can be overridden) */[m
+[31m-        .hero {[m
+[31m-            background: url('{% block hero_image %}{% static "deals/images/coffee-beans.jpg" %}{% endblock %}') center/cover no-repeat;[m
+[31m-            color: white;[m
+[31m-            text-align: center;[m
+[31m-            padding: 150px 20px 100px;[m
+[31m-            position: relative;[m
+[31m-        }[m
+[31m-        .hero-overlay {[m
+[31m-            position: absolute;[m
+[31m-            inset:0;[m
+[31m-            background: rgba(0,0,0,0.5);[m
+[31m-            z-index: 0;[m
+[31m-        }[m
+[31m-        .hero-content {[m
+[31m-            position: relative;[m
+[31m-            z-index: 1;[m
+[31m-        }[m
+[31m-[m
+[31m-        /* Cards and images */[m
+[31m-        .card-img-top, img.img-fluid {[m
+[31m-            height: 200px;[m
+[31m-            object-fit: cover;[m
+[31m-            border-radius: 12px;[m
+[31m-        }[m
+[31m-        .deal-card {[m
+[31m-            border-radius: 12px;[m
+[31m-            overflow: hidden;[m
+[31m-            transition: transform 0.3s;[m
+[31m-        }[m
+[31m-        .deal-card:hover {[m
+[31m-            transform: translateY(-5px);[m
+[31m-        }[m
+[31m-[m
+[31m-        /* Buttons */[m
+[31m-        .btn-dark {[m
+[31m-            background-color: #000;[m
+[31m-            border: none;[m
+[31m-            color: #fff;[m
+[31m-        }[m
+[31m-        .btn-dark:hover { background-color: #333; }[m
+[31m-        .btn-outline-secondary { border-radius: 5px; }[m
+[31m-[m
+[31m-        /* Footer */[m
+[31m-        .footer { border-top: 1px solid #ddd; padding: 20px 0; }[m
+[31m-        .footer a { text-decoration: none; color: #000; }[m
+[31m-[m
+[31m-        /* Adjust content for sidebar */[m
+[31m-        .main-content {[m
+[31m-            margin-left: 240px;[m
+[31m-            padding: 20px 0;[m
+[31m-        }[m
+[31m-    </style>[m
+[31m-</head>[m
+[31m-<body>[m
+[31m-[m
+[31m-<!-- Sidebar -->[m
+[31m-<nav class="sidebar">[m
+[31m-    <a class="navbar-brand" href="#">KAFEI</a>[m
+[31m-    <ul class="nav flex-column">[m
+[31m-        <li class="nav-item"><a class="nav-link" href="#">Our Menu</a></li>[m
+[31m-        <li class="nav-item"><a class="nav-link" href="#">Deals</a></li>[m
+[31m-        <li class="nav-item"><a class="nav-link" href="#">Favourites</a></li>[m
+[31m-        <li class="nav-item"><a class="nav-link" href="#">Cart</a></li>[m
+[31m-        <li class="nav-item"><a class="nav-link" href="#">About</a></li>[m
+[31m-        <li class="nav-item"><a class="btn btn-dark" href="#">Login</a></li>[m
+[31m-    </ul>[m
+[31m-</nav>[m
+[31m-[m
+[31m-<!-- Hero section (can be overridden) -->[m
+[31m-{% block hero %}{% endblock %}[m
+[31m-[m
+[31m-<!-- Main content -->[m
+[31m-<div class="container main-content">[m
+[31m-    {% block content %}{% endblock %}[m
+[31m-</div>[m
+[31m-[m
+[31m-<!-- Footer -->[m
+[31m-<footer class="footer text-center bg-light">[m
+[31m-    <div class="container">[m
+[31m-        <p>&copy; 2025 KAFEI. All rights reserved.</p>[m
+[31m-    </div>[m
+[31m-</footer>[m
+[31m-[m
+[31m-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>[m
+[31m-</body>[m
+[31m-</html>[m
+[31m-[m
+[1mdiff --git a/deals/urls.py b/deals/urls.py[m
+[1mindex d475ba9..6025661 100644[m
+[1m--- a/deals/urls.py[m
+[1m+++ b/deals/urls.py[m
+[36m@@ -1,6 +1,7 @@[m
+ from django.urls import path[m
+ from . import views[m
+[32m+[m[32mapp_name = "deals"[m[41m [m
+ [m
+ urlpatterns = [[m
+[31m-    path('', views.deals, name='deals'),  # ✅ use the correct function name[m
+[32m+[m[32m    path('', views.deals, name='deals'),[m[41m  [m
+ ][m
+[1mdiff --git a/homepage/templates/homepage/home.html b/homepage/templates/homep

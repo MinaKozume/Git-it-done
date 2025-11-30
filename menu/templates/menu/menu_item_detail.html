@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}KAFEI — Products{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item.name }} - KAFEI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+
+<!-- ITEM DETAIL SECTION -->
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="img-fluid">
+        </div>
+        <div class="col-md-6">
+            <h2>{{ item.name }}</h2>
+            <p>{{ item.description }}</p>
+            <p><strong>Price: Rs {{ item.price }}</strong></p>
+            <div>
+                <form action="{% url 'cart:add_to_cart' item.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-dark mt-3">Add to Cart</button>
+                </form>
+
+                <a href="{% url 'menu:menu_home' %}" class="btn btn-secondary">Go Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+{% endblock %}

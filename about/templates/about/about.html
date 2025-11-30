@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - KAFEI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'about/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container about-us-page">
+
+    <!-- MAIN BANNER -->
+    <div class="about-banner">
+        <h1>Welcome to KAFEI</h1>
+        <p>Where every cup is crafted with love and passion.</p>
+        <a href="#faq-section" class="btn btn-dark mt-3">Go to FAQ</a>
+    </div>
+
+    <!-- ABOUT KAFEI SECTION -->
+    <div class="about-container">
+        <!-- Image -->
+        <img src="{% static 'about/images/barista.jpg' %}" alt="Barista" class="about-img">
+
+        <!-- Text beside image -->
+        <div class="about-text">
+            <h2>About KAFEI</h2>
+            <p>KAFEI is a Mauritian-born coffee shop inspired by warm moments, slow mornings, and handcrafted flavors.</p>
+            <p>We blend premium beans, artisanal methods, and a cozy atmosphere to create an experience—not just a drink.</p>
+
+            <h3>☕ Our Story</h3>
+            <p>Started by a small team of coffee lovers, KAFEI was built on the idea that every cup should feel personal.</p>
+            <p>From handpicked beans to freshly brewed cups, every detail reflects passion.</p>
+        </div>
+    </div>
+
+    <!-- OUR VALUES CARDS (CENTERED BELOW) -->
+    <div class="values-section">
+        <h3>🌿 Our Values</h3>
+        <div class="values-row">
+            <div class="value-card">
+                <h4>Quality</h4>
+                <p>Fresh beans, handcrafted drinks</p>
+            </div>
+            <div class="value-card">
+                <h4>Comfort</h4>
+                <p>A space to relax, study, or connect</p>
+            </div>
+            <div class="value-card">
+                <h4>Care</h4>
+                <p>Friendly service and consistent warmth</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEPARATION BANNER -->
+    <div class="faq-banner my-5">
+        <h2>Have a Question? We’re Here to Help!</h2>
+        <p>If you cannot find your answer in our FAQ, feel free to contact us directly.</p>
+    </div>
+
+    <!-- CUSTOMER SERVICE SECTION -->
+    <div class="customer-service-section my-5">
+
+        <!-- Customer Message Card -->
+        <div class="customer-card">
+            <p>Hello, we welcome you to <strong>{{ coffee_shop_name }}</strong>.</p>
+            <p>Have a question? Check out our FAQ section below. If you cannot find your answer there, feel free to contact us directly.</p>
+
+            <h4>How to contact us:</h4>
+            <ul class="contact-info">
+                <li><i class="bi bi-envelope-fill"></i> Email us at <a href="mailto:coffeeshopname@gmail.com">coffeeshopname@gmail.com</a></li>
+                <li><i class="bi bi-geo-alt-fill"></i> Send mail to: <br>
+                    <em>CoffeeShopName, Customer Service, 67 Bean Street, 405016 Port-Louis</em>
+                </li>
+            </ul>
+        </div>
+
+        <!-- FAQ + Contact Form -->
+        <div class="row my-5" id="faq-section">
+            <!-- FAQ -->
+            <div class="col-lg-6">
+                <h3 class="faq-title"><i class="bi bi-question-circle-fill"></i> FAQ Section</h3>
+                <div id="faqAccordion">
+                    {% for faq in faqs %}
+                        <div class="card faq-card">
+                            <div class="card-header" id="heading{{ forloop.counter }}">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-controls="collapse{{ forloop.counter }}">
+                                        {{ faq.question }}
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#faqAccordion">
+                                <div class="card-body">
+                                    {{ faq.answer }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-6">
+                <h3 class="contact-title"><i class="bi bi-pencil-square"></i> Contact Us</h3>
+                <div class="contact-form-wrapper">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM CUSTOMER SERVICE CALL-OUT -->
+    <div class="bottom-cs-banner">
+        <h4><i class="bi bi-headset"></i> KAFEI Customer Service</h4>
+        <p>We’re always happy to help you!</p>
+    </div>
+
+</div>
+{% endblock %}
