@@ -5,7 +5,7 @@ def menu_page(request):
     categories = Category.objects.filter(is_active=True)
     items_by_category = {}
 
-    # Get filter/search/sort values
+   
     selected_category = request.GET.get('category')
     price_filter = request.GET.get('price')
     sort_option = request.GET.get('sort')
@@ -14,12 +14,12 @@ def menu_page(request):
     for cat in categories:
         items = MenuItem.objects.filter(category=cat, is_active=True)
 
-        # Filter by category if selected
+
         if selected_category and selected_category != 'all':
             if str(cat.id) != selected_category:
                 items = MenuItem.objects.none()
 
-        # Filter by price
+
         if price_filter:
             if price_filter == 'lt100':
                 items = items.filter(price__lt=100)
@@ -28,11 +28,10 @@ def menu_page(request):
             elif price_filter == 'gt200':
                 items = items.filter(price__gt=200)
 
-        # Search by name or description
+
         if search_query:
             items = items.filter(name__icontains=search_query) | items.filter(description__icontains=search_query)
 
-        # Sorting
         if sort_option == 'price_asc':
             items = items.order_by('price')
         elif sort_option == 'price_desc':

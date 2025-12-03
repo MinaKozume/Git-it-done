@@ -10,18 +10,18 @@
 {% block content %}
 <div class="signup-container">
 
-    <!-- Left Side: Signup Form -->
+   
     <div class="signup-form-side">
         <h2>Create Your Account</h2>
 
-        <!-- Show Django messages -->
+    
         {% if messages %}
             {% for message in messages %}
                 <p class="error">{{ message }}</p>
             {% endfor %}
         {% endif %}
 
-        <!-- Show all form errors -->
+
         {% if form.errors %}
             <ul class="error">
                 {% for field in form %}
@@ -67,7 +67,7 @@
         <p class="login-link">Already have an account? <a href="{% url 'accounts:login' %}">Log in</a></p>
     </div>
 
-    <!-- Right Side: Info / Guest -->
+
     <div class="signup-info-side">
         <h2>Join the Brew Crew</h2>
         <p>Sign up & savor the coffee with us!</p>

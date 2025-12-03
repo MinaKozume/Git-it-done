@@ -156,12 +156,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1; /* truncate to 1 line */
+    -webkit-line-clamp: 1; 
     -webkit-box-orient: vertical;
     margin-bottom: 0.5rem;
 }
 
-/* Custom button colors */
+
 .btn-dark-brown {
     background-color: #1C0A07;
     color: white;
@@ -174,13 +174,13 @@
 </style>
 
 <script>
-// Show all items for a category
+
 function showAll(catId) {
     const allItems = document.getElementById('all-items-' + catId);
     allItems.classList.toggle('d-none');
 }
 
-// Handle Add to Cart form submission via AJAX
+
 document.querySelectorAll(".add-to-cart-form").forEach(form => {
     form.addEventListener("submit", function(e) {
         e.preventDefault();
@@ -198,12 +198,12 @@ document.querySelectorAll(".add-to-cart-form").forEach(form => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Show success toast
+           
                 let toastEl = document.getElementById("cartToast");
                 let toast = new bootstrap.Toast(toastEl, {
                     animation: true,
                     autohide: true,
-                    delay: 2000 // auto-hide after 2 seconds
+                    delay: 2000 
                 });
                 toast.show();
             } else {

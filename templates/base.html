@@ -6,21 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}KAFEI{% endblock %}</title>
 
-    <!-- Bootstrap CSS -->
+ 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons for consistent iconography across the site -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-    <!-- Page-specific CSS -->
+  
     {% block extra_css %}
     {% endblock %}
 
-    <!-- Common Inline Styles -->
+
     <style>
         body { font-family: Arial, sans-serif; }
 
-        /* Header Navigation */
+
         .navbar-custom {
             background: white;
             padding: 20px 0;
@@ -77,21 +77,21 @@
 
 <body>
 
-<!-- HEADER -->
+
 <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container d-flex justify-content-between align-items-center">
 
-        <!-- Left Links -->
+
         <div class="d-flex align-items-center">
             <a href="{% url 'menu:menu_home' %}">Our Menu</a>
             <a href="{% url 'deals:deals' %}">Deals</a>
             <a href="{% url 'favourites:view_favourites' %}">Favourites</a>
         </div>
 
-        <!-- Brand -->
+
         <a class="navbar-brand" href="{% url 'homepage:homepage' %}">KAFEI</a>
 
-        <!-- Right Links -->
+   
         <div class="d-flex align-items-center">
             <a href="{% url 'cart:view_cart' %}">Cart</a>
             <a class="nav-link" href="{% url 'about:about' %}">About</a>
@@ -110,13 +110,13 @@
     </div>
 </nav>
 
-<!-- CONTENT -->
+
 <div class="container">
     {% block content %}
     {% endblock %}
 </div>
 
-<!-- FOOTER -->
+
 <footer>
     <div class="container d-flex justify-content-between flex-wrap">
 
@@ -144,11 +144,11 @@
     </div>
 </footer>
 
-<!-- Bootstrap JS Bundle -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 {% block extra_js %}
-<!-- Page-specific JS can go here -->
+
 {% endblock %}
 
 </body>

@@ -5,43 +5,41 @@
 {% block title %}KAFEI — Homepage{% endblock %}
 
 {% block extra_css %}
-<!-- Link to homepage-specific styles that override or extend base styles -->
+
 <link rel="stylesheet" href="{% static 'homepage/style.css' %}">
 {% endblock %}
 
 {% block content %}
-<!-- HERO SECTION -->
-<!-- first thing users see when they visit the site -->
+
 <section class="hero-section">
     <div class="container">
         <div class="row align-items-center min-vh-50">
-            <!-- Left column: Text content and call-to-action buttons -->
+
             <div class="col-lg-6">
                 <div class="hero-content text-center text-lg-start">
-                    <!-- Main heading - using Bootstrap display class for emphasis -->
+                    
                     <h1 class="hero-title display-4 fw-bold mb-4">
                         Welcome to KAFEI
                     </h1>
                     
-                    <!-- Subtitle -->
+                 
                     <p class="hero-subtitle lead text-light mb-4">
                         Your perfect cup of coffee awaits. Freshly brewed, perfectly crafted.
                     </p>
                     
-                    <!-- Button group with responsive layout -->
-                    <!-- d-grid on mobile, flex on desktop with proper spacing -->
+                    
                     <div class="d-grid gap-2 d-md-flex justify-content-md-start justify-content-center">
-                        <!-- Primary call-to-action button -->
+                       
                         <a href="{% url 'menu:menu_home' %}" class="btn btn-primary btn-lg px-4 me-md-2">
                             Order Now
                         </a>
                         
-                        <!-- Secondary button that scrolls to menu section -->
+
                         <button onclick="scrollToSection('menu-section')" class="btn btn-outline-secondary btn-lg px-4 me-md-2">
                             Explore
                         </button>
                         
-                        <!-- Link to about page -->
+
                         <a href="{% url 'about:about' %}" class="btn btn-outline-secondary btn-lg px-4">
                             About Us
                         </a>
@@ -49,20 +47,19 @@
                 </div>
             </div>
             
-            <!-- Right column: Hero image -->
+
             <div class="col-lg-6 mt-4 mt-lg-0">
-                <!-- If we have a hero image, display it with Bootstrap img-fluid for responsiveness -->
+
                 <img src="{% static 'homepage/images/rit.jpg' %}" alt="KAFEI Coffee" class="hero-image img-fluid rounded-3 shadow">
             </div>
         </div>
     </div>
 </section>
 
-<!-- OUR MENU SECTION -->
-<!-- Displays featured menu items dynamically from the database -->
+
 <section id="menu-section" class="menu-section">
     <div class="container">
-        <!-- Section header with title and "See More" link -->
+
         <div class="section-header">
             <h2 class="h1 fw-bold text-dark mb-0">Our Menu</h2>
             <a href="{% url 'menu:menu_home' %}" class="see-more-link btn btn-link text-decoration-none p-0">
@@ -70,7 +67,7 @@
             </a>
         </div>
         
-        <!-- Menu items grid - displays first 3 active items from database -->
+
         <div class="row g-4">
             {% for item in menu_items %}
             <div class="col-md-4 mb-4">
@@ -91,7 +88,7 @@
         </div>
 
             {% empty %}
-            <!-- This displays if there are no menu items in the database -->
+
             <div class="col-12">
                 <div class="text-center py-5">
                     <i class="bi bi-info-circle fs-1 text-muted d-block mb-3"></i>
@@ -103,11 +100,10 @@
     </div>
 </section>
 
-<!-- COMBO DEALS SECTION -->
-<!-- Displays featured deals dynamically from the database -->
+
 <section class="deals-section">
     <div class="container">
-        <!-- Section header -->
+
         <div class="section-header">
             <h2 class="h1 fw-bold text-dark mb-0">Combo Deals</h2>
             <a href="{% url 'deals:deals' %}" class="see-more-link btn btn-link text-decoration-none p-0">
@@ -115,7 +111,7 @@
             </a>
         </div>
         
-        <!-- Deals grid - displays first 3 active deals -->
+
         <div class="row g-4">
             {% for deal in deals %}
             <div class="col-md-4">
@@ -145,7 +141,7 @@
 
             </div>
             {% empty %}
-            <!-- Fallback if no deals available -->
+
             <div class="col-12">
                 <div class="text-center py-5">
                     <i class="bi bi-tag fs-1 text-muted d-block mb-3"></i>
@@ -157,8 +153,7 @@
     </div>
 </section>
 
-<!-- REVIEWS SECTION -->
-<!-- Displays customer reviews dynamically from the database -->
+
 <section class="reviews-section">
     <div class="container">
         <div class="section-header">
@@ -172,7 +167,7 @@
             {% for review in reviews %}
             <div class="col-md-4">
                 <div class="review-card h-100 shadow-sm">
-                    <!-- Star rating display using Bootstrap icons -->
+
                     <div class="rating">
                         {% for i in "12345" %}
                             {% if forloop.counter <= review.rating %}
@@ -183,15 +178,15 @@
                         {% endfor %}
                     </div>
                     
-                    <!-- Review text with quotation marks -->
+
                     <p class="review-text">"{{ review.comment }}"</p>
                     
-                    <!-- Reviewer's name -->
+
                     <p class="review-author">{{ review.name }}</p>
                 </div>
             </div>
             {% empty %}
-            <!-- Fallback if no reviews -->
+
             <div class="col-12">
                 <div class="text-center py-5">
                     <i class="bi bi-chat-quote fs-1 text-muted d-block mb-3"></i>
@@ -203,14 +198,12 @@
     </div>
 </section>
 
-<!--  JAVASCRIPT -->
-<!-- Smooth scroll function for the Explore button -->
+
 <script>
 function scrollToSection(sectionId) {
-    // This allows page to smoothly scroll to the specified section
-    // Used by the Explore button in the hero section
+
     document.getElementById(sectionId).scrollIntoView({ 
-        behavior: 'smooth' // Creates smooth animation instead of instant jump
+        behavior: 'smooth' 
     });
 }
 </script>

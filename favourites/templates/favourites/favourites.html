@@ -175,7 +175,7 @@
     </div>
 </div>
 
-<!-- ADDED TO CART POPUP -->
+
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
     <div id="cartToast" class="toast align-items-center text-white bg-success border-0" role="alert">
         <div class="d-flex">
@@ -191,7 +191,7 @@
 
 {% block extra_js %}
 <script>
-// Handle Add to Cart form submission via AJAX for favourites page
+
 document.querySelectorAll(".add-to-cart-form").forEach(form => {
     form.addEventListener("submit", function(e) {
         e.preventDefault();
@@ -209,12 +209,12 @@ document.querySelectorAll(".add-to-cart-form").forEach(form => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Show success toast
+              
                 let toastEl = document.getElementById("cartToast");
                 let toast = new bootstrap.Toast(toastEl, {
                     animation: true,
                     autohide: true,
-                    delay: 2000 // auto-hide after 2 seconds
+                    delay: 2000 
                 });
                 toast.show();
             } else {

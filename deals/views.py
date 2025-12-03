@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Deal, Category
-from cart.views import add_deal_to_cart  # Helper function we'll create in cart
+from cart.views import add_deal_to_cart  
 from datetime import date
 
 def deals(request):
@@ -20,8 +20,8 @@ def deals(request):
     return render(request, 'deals/deals.html', context)
 
 
-# "Order Now" view for Deals
+
 def order_now_deal(request, deal_id):
     deal = get_object_or_404(Deal, id=deal_id, is_active=True)
-    add_deal_to_cart(request, deal.id)  # Adds deal to cart
+    add_deal_to_cart(request, deal.id)  
     return redirect('orders:checkout')

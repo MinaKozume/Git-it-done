@@ -74,12 +74,12 @@
 const wrapper = document.getElementById('cardsWrapper');
 let offset = 0;
 
-// Calculate card width including margin
+
 const cardStyle = window.getComputedStyle(wrapper.children[0]);
 const cardWidth = wrapper.children[0].offsetWidth + parseInt(cardStyle.marginRight);
 const totalCards = wrapper.children.length;
 
-// NEXT button
+
 document.getElementById('nextBtn').onclick = () => {
     if (Math.abs(offset) < (totalCards - 1) * cardWidth) {
         offset -= cardWidth;
@@ -87,7 +87,7 @@ document.getElementById('nextBtn').onclick = () => {
     }
 };
 
-// PREV button
+
 document.getElementById('prevBtn').onclick = () => {
     if (offset < 0) {
         offset += cardWidth;

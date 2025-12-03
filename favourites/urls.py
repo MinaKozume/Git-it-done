@@ -2,7 +2,7 @@
 from django.urls import path
 from . import views
 
-# app_name is "favourites" (British spelling)
+
 app_name = "favourites"
 
 urlpatterns = [

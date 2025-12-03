@@ -4,12 +4,10 @@ from cart.models import CartItem
 from deals.models import Deal
 from .models import Order, OrderItem, BankPaymentDetails, CashPickupDetails
 
-# -------------------------
-# CHECKOUT
-# -------------------------
+
 @login_required
 def checkout(request):
-    # Include both normal cart items and temporary "order now" items
+
     cart_items = CartItem.objects.filter(user=request.user)
     total = sum(item.subtotal() for item in cart_items)
 
@@ -20,9 +18,6 @@ def checkout(request):
     })
 
 
-# -------------------------
-# PLACE ORDER
-# -------------------------
 @login_required
 def place_order(request):
     if request.method != "POST":
@@ -73,40 +68,35 @@ def place_order(request):
             pickup_phone=request.POST.get("pickup_phone")
         )
 
-    # Clear cart (both normal and temporary items)
+    
     cart_items.delete()
 
     return redirect("orders:success")
 
 
-# -------------------------
-# SUCCESS PAGE
-# -------------------------
+
 @login_required
 def success(request):
     return render(request, "orders/success.html")
 
 
-# -------------------------
-# ORDER HISTORY
-# -------------------------
+
 @login_required
 def order_history(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, "orders/order_history.html", {"orders": orders})
 
 
-# -------------------------
-# ORDER NOW FOR DEALS
-# -------------------------
+
+
 @login_required
 def order_now_deal(request, deal_id):
     deal = get_object_or_404(Deal, id=deal_id)
 
-    # Remove any previous temporary "order now" items
+    
     CartItem.objects.filter(user=request.user, temp_order_now=True).delete()
 
-    # Add this deal as a temporary cart item
+  
     CartItem.objects.create(
         user=request.user,
         deal=deal,
@@ -115,5 +105,5 @@ def order_now_deal(request, deal_id):
         temp_order_now=True
     )
 
-    # Redirect to checkout
+
     return redirect("orders:checkout")

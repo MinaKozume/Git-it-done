@@ -1,22 +1,22 @@
 from django.shortcuts import render, redirect
 from django.db.models import Avg
 from .models import Review
-from .forms import ReviewForm  # Assuming you have this form
+from .forms import ReviewForm  
 
 def reviews_list(request):
-    # Get latest 3 reviews and all reviews
+    
     latest_three = Review.objects.order_by('-date')[:3]
     all_reviews = Review.objects.order_by('-date')
 
-    # Calculate total reviews and average rating
+    
     total_reviews = all_reviews.count()
-    average_rating = all_reviews.aggregate(Avg('rating'))['rating__avg'] or 0  # default 0 if no reviews
+    average_rating = all_reviews.aggregate(Avg('rating'))['rating__avg'] or 0 
 
     context = {
         "latest_three": latest_three,
         "all_reviews": all_reviews,
         "total_reviews": total_reviews,
-        "average_rating": round(average_rating, 1),  # optional rounding
+        "average_rating": round(average_rating, 1),  
     }
     return render(request, 'reviews/reviews.html', context)
 
@@ -26,7 +26,7 @@ def add_review(request):
         form = ReviewForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("reviews:reviews")  # Redirect to the reviews list after adding
+            return redirect("reviews:reviews") 
     else:
         form = ReviewForm()
 
@@ -34,10 +34,10 @@ def add_review(request):
 
 
 def reviews_full_list(request):
-    # Get all reviews
+   
     all_reviews = Review.objects.order_by('-date')
 
-    # Calculate total reviews and average rating
+
     total_reviews = all_reviews.count()
     average_rating = all_reviews.aggregate(Avg('rating'))['rating__avg'] or 0
 

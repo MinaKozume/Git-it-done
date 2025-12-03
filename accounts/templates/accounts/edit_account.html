@@ -28,7 +28,7 @@
         transform: translateY(-3px);
     }
 
-    /* Style Django form fields */
+
     .edit-card input {
         width: 100%;
         padding: 10px;
@@ -97,7 +97,7 @@
     <form method="POST">
         {% csrf_token %}
         
-        <!-- Render Django form but keep your styling -->
+
         {{ form.as_p }}
 
         <button type="submit">Save Changes</button>

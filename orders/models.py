@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from menu.models import MenuItem
 from deals.models import Deal
 
-# Stores a single completed order
+
 class Order(models.Model):
     PAYMENT_CHOICES = [
         ("BANK", "Bank Transfer"),
@@ -31,7 +31,7 @@ class Order(models.Model):
         return f"Order #{self.id} - {self.user.username}"
 
 
-# Items inside an order (can be menu items or deals)
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(MenuItem, on_delete=models.SET_NULL, null=True, blank=True)
@@ -43,7 +43,7 @@ class OrderItem(models.Model):
         return self.quantity * self.price_at_purchase
 
 
-# Bank payment details
+
 class BankPaymentDetails(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="bank_details")
     phone_used = models.CharField(max_length=20)
@@ -53,7 +53,6 @@ class BankPaymentDetails(models.Model):
         return f"Bank Payment for Order #{self.order.id}"
 
 
-# Cash on pickup
 class CashPickupDetails(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="cash_details")
     pickup_name = models.CharField(max_length=100)

@@ -71,11 +71,10 @@ document.getElementById("add-to-cart-form").addEventListener("submit", function(
         if (data.success) {
             let toastEl = document.getElementById("cartToast");
 
-            // Initialize Bootstrap toast with options
             let toast = new bootstrap.Toast(toastEl, {
                 animation: true,
                 autohide: true,
-                delay: 2000 // toast will disappear after 2 seconds
+                delay: 2000 
             });
 
             toast.show();

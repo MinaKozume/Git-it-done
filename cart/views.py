@@ -35,14 +35,13 @@ def add_to_cart(request, product_id):
             cart_item.quantity += quantity
             cart_item.save()
 
-        # If AJAX request → return JSON for toast
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'success': True})
 
-        # If normal POST → redirect back to previous page
+
         return redirect(request.META.get("HTTP_REFERER", "cart:view_cart"))
 
-    # For invalid requests
+
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
@@ -69,11 +68,11 @@ def add_deal_to_cart(request, deal_id):
             cart_item.quantity += quantity
             cart_item.save()
 
-        # ---------- AJAX REQUEST ----------
+        
         if request.headers.get("X-Requested-With") == "XMLHttpRequest":
             return JsonResponse({"success": True})
 
-        # ---------- NORMAL REQUEST ----------
+        
         return redirect(request.META.get("HTTP_REFERER", "cart:view_cart"))
 
     return redirect("deals:deals")

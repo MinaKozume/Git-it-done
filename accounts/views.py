@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 from .forms import SignupForm, EditAccountForm
 from django.contrib.auth.views import PasswordChangeDoneView
 
-from orders.models import Order  # Add this import to get user orders
+from orders.models import Order  
 
 # -------------------------
 # SIGN UP
@@ -45,7 +45,7 @@ def login_view(request):
             user = User.objects.get(email=username_or_email)
             username = user.username
         except User.DoesNotExist:
-            username = username_or_email  # user may have entered username
+            username = username_or_email 
 
         user = authenticate(request, username=username, password=password)
 
@@ -95,7 +95,7 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user) 
             messages.success(request, "Password changed successfully.")
-            return redirect("accounts:password_change_done")  # Redirect to the custom done page
+            return redirect("accounts:password_change_done")  
     else:
         form = PasswordChangeForm(request.user)
 
@@ -118,6 +118,6 @@ def delete_account(request):
 
     return render(request, 'accounts/delete_account.html')
 
-# Custom view for password change done
+
 class CustomPasswordChangeDoneView(PasswordChangeDoneView):
-    template_name = "accounts/password_change_done.html"  # Point to your custom template
+    template_name = "accounts/password_change_done.html"  

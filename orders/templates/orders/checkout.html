@@ -6,7 +6,7 @@
 {% block content %}
 <h2 class="mt-5 fw-bold text-center" style="color:#4B2E2E;">Checkout</h2>
 
-<!-- Background only behind the cards -->
+
 <div class="checkout-background d-flex justify-content-center p-4">
     <div class="checkout-form-wrapper" style="max-width: 600px; width: 100%;">
         <form method="POST" action="{% url 'orders:place_order' %}" class="mt-4">
@@ -122,7 +122,7 @@ document.getElementById("payCash").addEventListener("change", function() {
 }
 
 .checkout-card {
-    background-color: rgba(255, 255, 255, 0.95) !important;  /* slightly transparent to show background */
+    background-color: rgba(255, 255, 255, 0.95) !important;
     transition: 0.2s;
 }
 

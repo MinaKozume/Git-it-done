@@ -8,7 +8,7 @@ class FavouriteItem(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'product')  # Prevent duplicates
+        unique_together = ('user', 'product')  
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
