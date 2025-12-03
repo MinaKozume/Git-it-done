@@ -10,7 +10,7 @@ This repository is used to collaborate, share code, and track contributions.
 ## 👥 Team Members
 - Sewnarain Downeshwari|2416337 - 1-ritika-1
 - Milena Nathalie Jacquette|2416866 - MinaKozume   
-- Ramkhalawon Bhimarika Rye|2416454 - 
+- Ramkhalawon Bhimarika Rye|2416454 - hans-init
 - Oozeer Muhammad Is-haaq Hussein|2415962 - Borgishq
 - Beegoo Muhammad Farhaan Ally|2416664 - Farhaanbg
 
