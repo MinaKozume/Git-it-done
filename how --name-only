@@ -1,0 +1,156 @@
+[1mdiff --git a/accounts/templates/accounts/account_detail.html b/accounts/templates/accounts/account_detail.html[m
+[1mindex efb334d..4bb168d 100644[m
+[1m--- a/accounts/templates/accounts/account_detail.html[m
+[1m+++ b/accounts/templates/accounts/account_detail.html[m
+[36m@@ -127,6 +127,7 @@[m
+                 {% for item in order.items.all %}[m
+                 <div class="order-item" style="display:flex; align-items:center; padding:4px 0; color:#4B2E2E; position:relative;">[m
+ [m
+[32m+[m[32m                    <!-- Order ID (first item only) -->[m
+                     {% if forloop.first %}[m
+                         <div style="flex:1; min-width:80px;" rowspan="{{ order.items.count }}">[m
+                             #{{ order.id }}[m
+[36m@@ -135,19 +136,32 @@[m
+                         <div style="flex:1; min-width:80px;"></div>[m
+                     {% endif %}[m
+ [m
+[31m-                    <div style="flex:3; min-width:150px;">{{ item.product.name }}</div>[m
+[32m+[m[32m                    <!-- Item Title -->[m
+[32m+[m[32m                    <div style="flex:3; min-width:150px;">[m
+[32m+[m[32m                        {% if item.product %}[m
+[32m+[m[32m                            {{ item.product.name }}[m
+[32m+[m[32m                        {% elif item.deal %}[m
+[32m+[m[32m                            {{ item.deal.title }}[m
+[32m+[m[32m                        {% else %}[m
+[32m+[m[32m                            Item name not available[m
+[32m+[m[32m                        {% endif %}[m
+[32m+[m[32m                    </div>[m
+ [m
+[32m+[m
+[32m+[m[32m                    <!-- Status (first item only) -->[m
+                     {% if forloop.first %}[m
+                         <div style="flex:1; min-width:120px; position:relative;" rowspan="{{ order.items.count }}">[m
+                             <span class="status-stamp">{{ order.status }}</span>[m
+                         </div>[m
+                     {% endif %}[m
+ [m
+[31m-[m
+[32m+[m[32m                    <!-- Quantity -->[m
+                     <div style="flex:1; min-width:80px;">{{ item.quantity }}</div>[m
+ [m
+[32m+[m[32m                    <!-- Total price for this item -->[m
+                     <div style="flex:1; min-width:100px;">${{ item.price_at_purchase|floatformat:2 }}</div>[m
+ [m
+[32m+[m[32m                    <!-- Payment Method (first item only) -->[m
+                     {% if forloop.first %}[m
+                         <div style="flex:1; min-width:100px;" rowspan="{{ order.items.count }}">[m
+                             {{ order.payment_method }}[m
+[36m@@ -187,7 +201,7 @@[m
+ [m
+ </div>[m
+ [m
+[31m-<!-- JS -->[m
+[32m+[m[32m<!-- JS for See All / See Less -->[m
+ <script>[m
+ const toggleBtn = document.getElementById('toggle-orders-btn');[m
+ if (toggleBtn) {[m
+[36m@@ -206,4 +220,5 @@[m [mif (toggleBtn) {[m
+ }[m
+ </script>[m
+ [m
+[32m+[m
+ {% endblock %}[m
+[1mdiff --git a/cart/models.py b/cart/models.py[m
+[1mindex 8dd8bc6..1992eb9 100644[m
+[1m--- a/cart/models.py[m
+[1m+++ b/cart/models.py[m
+[36m@@ -1,18 +1,23 @@[m
+ from django.db import models[m
+ from django.contrib.auth.models import User[m
+ from menu.models import MenuItem[m
+[32m+[m[32mfrom deals.models import Deal[m
+ [m
+[31m-# A cart item represents ONE product in a user's cart[m
+ class CartItem(models.Model):[m
+[31m-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cart_items")[m
+[31m-    product = models.ForeignKey(MenuItem, on_delete=models.CASCADE)[m
+[32m+[m[32m    ITEM_CHOICES = ([m
+[32m+[m[32m        ('MENU', 'Menu Item'),[m
+[32m+[m[32m        ('DEAL', 'Deal'),[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    user = models.ForeignKey(User, on_delete=models.CASCADE)[m
+[32m+[m[32m    product = models.ForeignKey(MenuItem, null=True, blank=True, on_delete=models.CASCADE)[m
+[32m+[m[32m    deal = models.ForeignKey(Deal, null=True, blank=True, on_delete=models.CASCADE)[m
+     quantity = models.PositiveIntegerField(default=1)[m
+[32m+[m[32m    item_type = models.CharField(max_length=10, choices=ITEM_CHOICES)[m
+ [m
+     def subtotal(self):[m
+[31m-        return self.product.price * self.quantity[m
+[31m-[m
+[31m-    def __str__(self):[m
+[31m-        return f"{self.product.name} x {self.quantity} ({self.user.username})"[m
+[31m-[m
+[31m-    class Meta:[m
+[31m-        unique_together = ('user', 'product')  # prevents duplicate cart entries[m
+[32m+[m[32m        if self.item_type == 'MENU' and self.product:[m
+[32m+[m[32m            return self.product.price * self.quantity[m
+[32m+[m[32m        elif self.item_type == 'DEAL' and self.deal:[m
+[32m+[m[32m            return self.deal.price_after * self.quantity[m
+[32m+[m[32m        return 0[m
+[1mdiff --git a/cart/templates/cart/cart.html b/cart/templates/cart/cart.html[m
+[1mindex a3a4276..9af6b44 100644[m
+[1m--- a/cart/templates/cart/cart.html[m
+[1m+++ b/cart/templates/cart/cart.html[m
+[36m@@ -6,101 +6,85 @@[m
+ <h2 class="mt-5 fw-bold">My Cart</h2>[m
+ [m
+ {% if items %}[m
+[31m-<!-- ========================= CART ITEMS ========================= -->[m
+[31m-[m
+ <div class="mt-4">[m
+[31m-[m
+     {% for item in items %}[m
+     <div class="card mb-3 p-3 d-flex flex-row align-items-center shadow-sm border-0 rounded-4 cart-card"[m
+          style="transition: 0.2s;">[m
+[31m-         [m
+[31m-        <img src="{{ item.product.image.url }}" alt=""[m
+[31m-            style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px;"[m
+[31m-            class="me-4">[m
+ [m
+[31m-        <div class="flex-grow-1">[m
+[32m+[m[32m        <!-- Image -->[m
+[32m+[m[32m        {% if item.item_type == 'MENU' and item.product.image %}[m
+[32m+[m[32m            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:120px; height:120px; object-fit:cover; border-radius:12px;" class="me-4">[m
+[32m+[m[32m        {% elif item.item_type == 'DEAL' and item.deal.image %}[m
+[32m+[m[32m            <img src="{{ item.deal.image.url }}" alt="{{ item.deal.title }}" style="width:120px; height:120px; object-fit:cover; border-radius:12px;" class="me-4">[m
+[32m+[m[32m        {% endif %}[m
+ [m
+[31m-            <h5 class="fw-semibold mb-1">{{ item.product.name }}</h5>[m
+[31m-            <p class="text-muted mb-2" style="font-size: 0.95rem;">${{ item.product.price }}</p>[m
+[31m-[m
+[31m-            <form action="{% url 'cart:update_quantity' item.id %}" method="POST"[m
+[31m-                class="d-flex align-items-center gap-2">[m
+[32m+[m[32m        <!-- Info -->[m
+[32m+[m[32m        <div class="flex-grow-1">[m
+[32m+[m[32m            <h5 class="fw-semibold mb-1">[m
+[32m+[m[32m                {% if item.item_type == 'MENU' %}{{ item.product.name }}[m
+[32m+[m[32m                {% else %}{{ item.deal.title }}{% endif %}[m
+[32m+[m[32m            </h5>[m
+[32m+[m
+[32m+[m[32m            <p class="text-muted mb-2" style="font-size:0.95rem;">[m
+[32m+[m[32m                {% if item.item_type == 'MENU' %}Rs {{ item.product.price }}[m
+[32m+[m[32m                {% else %}Rs {{ item.deal.price_after }}{% endif %}[m
+[32m+[m[32m            </p>[m
+[32m+[m
+[32m+[m[32m            <!-- Update quantity -->[m
+[32m+[m[32m            <form action="{% url 'cart:update_quantity' item.id %}" method="POST" class="d-flex align-items-center gap-2">[m
+                 {% csrf_token %}[m
+[31m-                <input type="number" name="quantity" value="{{ item.quantity }}" min="1"[m
+[31m-                    class="form-control form-control-sm" style="max-width: 80px;">[m
+[32m+[m[32m                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm" style="max-width:80px;">[m
+                 <button class="btn btn-outline-dark btn-sm">Update</button>[m
+             </form>[m
+ [m
+[32m+[m[32m            <!-- Remove button -->[m
+             <form action="{% url 'cart:remove_from_cart' item.id %}" method

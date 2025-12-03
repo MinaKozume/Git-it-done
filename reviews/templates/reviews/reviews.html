@@ -1,20 +1,98 @@
+{% extends "base.html" %}
 {% load static %}
 
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>KAFEI — Reviews</title>
-  <link rel="stylesheet" href="{% static 'reviews/style.css' %}">
-</head>
+{% block title %}Reviews - KAFEI{% endblock %}
 
-<body>
-  <h1>Hello from Reviews!</h1>
-  <nav>
-    <a href="{% url 'homepage:homepage' %}">Home</a> |
-    <a href="{% url 'menu:menu_home' %}">Menu</a> | 
-    <a href="{% url 'reviews:reviews' %}">Reviews</a> |
-    <a href="{% url 'deals:deals' %}">Deals</a> |
-    <a href="{% url 'about:about' %}">About Us</a>
-  </nav>
-</body>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'reviews/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="banner-section">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+        <h1>What our customers think</h1>
+        <p>Do not just take our word for it, see what our amazing customers have to say about us</p>
+    </div>
+</div>
+
+<div class="review-buttons">
+    <a href="{% url 'reviews:add_review' %}" class="btn-review">Leave a review</a>
+    <a href="#recent-feedbacks" class="btn-review">View Reviews</a>
+</div>
+
+<div id="recent-feedbacks" class="feedback-section">
+    <h2>RECENT FEEDBACKS</h2>
+    <hr class="feedback-hr">
+
+    <div class="testimonials-counter">
+        <div>Total Reviews: <span>{{ total_reviews }}</span></div>
+        <div>Average Rating: <span>{{ average_rating }} / 5</span></div>
+    </div>
+
+    <!-- Carousel -->
+    <div class="cards-container">
+        <button id="prevBtn" class="carousel-btn prev">&#10094;</button>
+
+        <div id="cardsWrapper" class="cards-wrapper">
+            {% for r in all_reviews %}
+            <div class="review-card {% if forloop.first %}newest-card{% endif %}">
+                <div class="review-header">
+                    <div class="review-avatar"></div>
+                    <strong>{{ r.name }}</strong>
+                </div>
+                <div class="review-stars">
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= r.rating %}
+                            <span class="star filled">&#9733;</span>
+                        {% else %}
+                            <span class="star">&#9733;</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p class="review-comment">{{ r.comment }}</p>
+                <p class="review-date">{{ r.date|date:"d/m/Y" }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button id="nextBtn" class="carousel-btn next">&#10095;</button>
+    </div>
+
+    <div class="see-all-btn">
+        <a href="{% url 'reviews:reviews_full_list' %}" class="btn-review">See All Reviews</a>
+    </div>
+
+    <div class="feedback-quote">
+        “We love our coffee, but we love our customers’ feedback even more!”
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const wrapper = document.getElementById('cardsWrapper');
+let offset = 0;
+
+
+const cardStyle = window.getComputedStyle(wrapper.children[0]);
+const cardWidth = wrapper.children[0].offsetWidth + parseInt(cardStyle.marginRight);
+const totalCards = wrapper.children.length;
+
+
+document.getElementById('nextBtn').onclick = () => {
+    if (Math.abs(offset) < (totalCards - 1) * cardWidth) {
+        offset -= cardWidth;
+        wrapper.style.transform = `translateX(${offset}px)`;
+    }
+};
+
+
+document.getElementById('prevBtn').onclick = () => {
+    if (offset < 0) {
+        offset += cardWidth;
+        wrapper.style.transform = `translateX(${offset}px)`;
+    }
+};
+</script>
+{% endblock %}

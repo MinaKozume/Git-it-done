@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Checkout – KAFEI{% endblock %}
+
+{% block content %}
+<h2 class="mt-5 fw-bold text-center" style="color:#4B2E2E;">Checkout</h2>
+
+
+<div class="checkout-background d-flex justify-content-center p-4">
+    <div class="checkout-form-wrapper" style="max-width: 600px; width: 100%;">
+        <form method="POST" action="{% url 'orders:place_order' %}" class="mt-4">
+            {% csrf_token %}
+
+            <!-- ========================= EMAIL ========================= -->
+            <div class="card p-3 mb-3 shadow-sm border-0 rounded-4 checkout-card">
+                <label class="form-label fw-semibold" style="color:#4B2E2E;">Email </label>
+                <input type="email" name="email" class="form-control mt-2 rounded-3"
+                       value="{{ user_email }}" required>
+            </div>
+
+            <!-- ========================= PAYMENT METHOD ========================= -->
+            <div class="card p-3 mb-3 shadow-sm border-0 rounded-4 checkout-card">
+                <h4 class="fw-semibold mb-3" style="color:#4B2E2E;">Payment Method </h4>
+
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="payment_method" value="BANK" checked id="payBank">
+                    <label class="form-check-label" for="payBank">Bank transfer</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="payment_method" value="CASH" id="payCash">
+                    <label class="form-check-label" for="payCash">Cash on pickup</label>
+                </div>
+            </div>
+
+            <!-- ========================= BANK SECTION ========================= -->
+            <div id="bankSection" class="card p-3 mb-3 shadow-sm border-0 rounded-4 checkout-card">
+                <h5 class="fw-semibold mb-3" style="color:#4B2E2E;">Scan this QR code to pay</h5>
+                <img src="{% static 'images/qr.png' %}" width="500" class="mb-3">
+
+                <div class="mt-3">
+                    <label class="form-label">Phone number used for transfer</label>
+                    <input type="text" name="bank_phone" class="form-control mb-2 rounded-3" required>
+                </div>
+
+                <label class="form-label">Note (optional)</label>
+                <textarea name="bank_note" class="form-control rounded-3"></textarea>
+            </div>
+
+            <!-- ========================= CASH SECTION ========================= -->
+            <div id="cashSection" class="card p-3 mb-3 shadow-sm border-0 rounded-4 checkout-card" style="display:none;">
+                <label class="form-label">Pickup Name</label>
+                <input type="text" name="pickup_name" class="form-control mb-2 rounded-3">
+
+                <label class="form-label">Phone</label>
+                <input type="text" name="pickup_phone" class="form-control rounded-3">
+            </div>
+
+            <!-- ========================= TOTAL ========================= -->
+            <div class="card p-3 mb-3 shadow-sm border-0 rounded-4 checkout-card">
+                <h5 class="fw-bold" style="color:#4B2E2E;">Total: Rs {{ total }}</h5>
+            </div>
+
+            <!-- ========================= BUTTONS ========================= -->
+            <button type="submit" class="btn w-100 mt-3 rounded-3" style="background-color:#ffffff; color:#000000; font-weight:600; transition:0.2s;">
+                Confirm Payment
+            </button>
+
+            <a href="{% url 'cart:view_cart' %}" class="btn w-100 mt-2 rounded-3" style="background-color:#ff0d00; color:#ffffff; font-weight:600;">
+                Cancel Order
+            </a>
+
+
+        </form>
+    </div>
+</div>
+
+<script>
+const bankPhone = document.querySelector("input[name='bank_phone']");
+const bankNote = document.querySelector("textarea[name='bank_note']");
+const pickupName = document.querySelector("input[name='pickup_name']");
+const pickupPhone = document.querySelector("input[name='pickup_phone']");
+
+document.getElementById("payBank").addEventListener("change", function() {
+    document.getElementById("bankSection").style.display = "block";
+    document.getElementById("cashSection").style.display = "none";
+
+    bankPhone.required = true;
+    pickupName.required = false;
+    pickupPhone.required = false;
+});
+
+document.getElementById("payCash").addEventListener("change", function() {
+    document.getElementById("bankSection").style.display = "none";
+    document.getElementById("cashSection").style.display = "block";
+
+    bankPhone.required = false;
+    pickupName.required = true;
+    pickupPhone.required = true;
+});
+</script>
+
+<style>
+.checkout-background {
+    background-image: url("{% static 'accounts/images/coffee-beans.jpeg' %}");
+
+    background-size: cover;       
+    background-position: center;
+    background-repeat: no-repeat;
+
+    width: 100%;         
+    max-width: 900px;     
+    margin: 0 auto;                
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.checkout-form-wrapper {
+    width: 100%;
+}
+
+.checkout-card {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    transition: 0.2s;
+}
+
+.checkout-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.btn:hover {
+    background-color:#39211f;
+}
+</style>
+
+
+{% endblock %}

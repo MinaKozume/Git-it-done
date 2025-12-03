@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Order Successful{% endblock %}
+
+{% block content %}
+<div class="order-success-wrapper d-flex justify-content-center align-items-center">
+    <div class="card p-5 shadow-sm rounded-4 text-center" style="max-width:500px; background-color: rgba(246, 246, 246, 0.9);">
+        <h2 class="fw-bold mb-3" style="color:#4B2E2E;">Your order has been placed!</h2>
+        <p class="mb-4" style="color:#7a4e3e; font-size:1.1rem;">We will contact you soon.</p>
+        <a href="{% url 'menu:menu_home' %}" class="btn btn-dark px-4 py-2 rounded-3" style="background-color:#4B2E2E; color:#fff; font-weight:600; transition:0.2s;">
+            Back to Menu
+        </a>
+    </div>
+</div>
+
+<style>
+.order-success-wrapper {
+    min-height: 80vh; 
+    background-image: url("{% static 'accounts/images/coffee-beans2.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    padding: 50px 0;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    transition: 0.2s;
+}
+
+.btn-dark:hover {
+    background-color: #39211f;
+}
+</style>
+{% endblock %}

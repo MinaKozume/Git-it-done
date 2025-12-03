@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}All Reviews - KAFEI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'reviews/style.css' %}">
+
+<style>
+
+/* Banner Section */
+.all-reviews-banner {
+    position: relative;
+    background-image: url('/static/image/coffee.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    padding: 60px 20px;
+    color: white;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.all-reviews-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 12px;
+}
+.all-reviews-banner h1,
+.all-reviews-banner p {
+    position: relative;
+    z-index: 1;
+}
+.all-reviews-banner h1 {
+    font-size: 36px;
+    font-weight: 900;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+}
+.all-reviews-banner p {
+    margin-top: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+/* Stats Section */
+.stats-container {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+.stats-container div {
+    background: #fff;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Masonry Layout */
+.masonry-container {
+    column-count: 3;
+    column-gap: 20px;
+    width: 100%;
+}
+
+/* Cards inside Masonry */
+.masonry-card {
+    background-color: rgb(196,148,83);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    width: 100%;
+    display: inline-block;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    transition: 0.3s ease;
+}
+.masonry-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.35);
+}
+
+.masonry-card h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+
+/* Stars */
+.masonry-stars {
+    margin-bottom: 10px;
+}
+.star {
+    font-size: 16px;
+    color: #ddd;
+}
+.star.filled { color: gold; }
+
+.masonry-comment {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.masonry-date {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Buttons */
+.back-btn {
+    background: black;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+}
+.back-btn:hover {
+    background: #333;
+}
+
+/* Responsive */
+@media(max-width:1024px){ .masonry-container{ column-count:2; } }
+@media(max-width:600px){ 
+    .masonry-container{ column-count:1; } 
+    .all-reviews-banner h1{ font-size:28px; }
+}
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- Banner -->
+<div class="all-reviews-banner">
+    <h1>Customer Reviews</h1>
+    <p>Real experiences from our valued coffee lovers.</p>
+</div>
+
+<!-- Stats -->
+<div class="stats-container">
+    <div>Total Reviews: {{ total_reviews }}</div>
+    <div>Average Rating: {{ average_rating }} / 5</div>
+</div>
+
+<!-- Masonry Reviews -->
+<div class="masonry-container">
+    {% for r in all_reviews %}
+        <div class="masonry-card">
+            <h3>{{ r.name }}</h3>
+
+            <div class="masonry-stars">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= r.rating %}
+                        <span class="star filled">&#9733;</span>
+                    {% else %}
+                        <span class="star">&#9733;</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <p class="masonry-comment">{{ r.comment }}</p>
+            <p class="masonry-date">{{ r.date|date:"d/m/Y" }}</p>
+        </div>
+    {% empty %}
+        <p>No reviews yet.</p>
+    {% endfor %}
+</div>
+
+<!-- Buttons -->
+<div style="text-align:center; margin-top:30px; display:flex; justify-content:center; gap:15px;">
+    <a href="{% url 'reviews:add_review' %}" class="back-btn">Leave a Review</a>
+    <a href="javascript:void(0);" onclick="history.back();" class="back-btn">Back</a>
+</div>
+
+{% endblock %}
