@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}My Cart – KAFEI{% endblock %}
+
+{% block content %}
+
+<h2 class="mt-5 fw-bold">My Cart</h2>
+
+{% if items %}
+<div class="mt-4">
+    {% for item in items %}
+    <div class="card mb-3 p-3 d-flex flex-row align-items-center shadow-sm border-0 rounded-4 cart-card"
+         style="transition: 0.2s;">
+
+        <!-- Image -->
+        {% if item.item_type == 'MENU' and item.product.image %}
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:120px; height:120px; object-fit:cover; border-radius:12px;" class="me-4">
+        {% elif item.item_type == 'DEAL' and item.deal.image %}
+            <img src="{{ item.deal.image.url }}" alt="{{ item.deal.title }}" style="width:120px; height:120px; object-fit:cover; border-radius:12px;" class="me-4">
+        {% endif %}
+
+        <!-- Info -->
+        <div class="flex-grow-1">
+            <h5 class="fw-semibold mb-1">
+                {% if item.item_type == 'MENU' %}{{ item.product.name }}
+                {% else %}{{ item.deal.title }}{% endif %}
+            </h5>
+
+            <p class="text-muted mb-2" style="font-size:0.95rem;">
+                {% if item.item_type == 'MENU' %}Rs {{ item.product.price }}
+                {% else %}Rs {{ item.deal.price_after }}{% endif %}
+            </p>
+
+            <!-- Update quantity -->
+            <form action="{% url 'cart:update_quantity' item.id %}" method="POST" class="d-flex align-items-center gap-2">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm" style="max-width:80px;">
+                <button class="btn btn-outline-dark btn-sm">Update</button>
+            </form>
+
+            <!-- Remove button -->
+            <form action="{% url 'cart:remove_from_cart' item.id %}" method="POST" class="mt-2">
+                {% csrf_token %}
+                <button class="btn btn-danger btn-sm rounded-pill px-3">Remove</button>
+            </form>
+        </div>
+
+        <!-- Subtotal -->
+        <div class="text-end ms-4">
+            <strong style="font-size:1.1rem;">Rs {{ item.subtotal }}</strong>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Total + Checkout -->
+    <div class="text-end mt-4 p-4 rounded-4 shadow-sm border">
+        <h4 class="fw-bold mb-3">Total: Rs {{ total }}</h4>
+        <a href="{% url 'orders:checkout' %}" class="btn btn-dark px-4 py-2 rounded-3 me-2">Proceed to Checkout</a>
+        <a href="{% url 'menu:menu_home' %}" class="btn btn-outline-dark px-4 py-2 rounded-3">Order More</a>
+    </div>
+</div>
+
+{% else %}
+<p class="mt-4 text-muted">Your cart is empty.</p>
+<a href="{% url 'menu:menu_home' %}" class="btn btn-dark mt-3 mb-4 rounded-pill px-4 py-2">View Menu</a>
+{% endif %}
+
+<!-- ========================= YOU MAY LIKE ========================= -->
+{% if suggestions %}
+<hr class="my-5">
+<h3 class="mt-4 mb-3 fw-bold">You may like</h3>
+<div class="row">
+    {% for s in suggestions %}
+    <div class="col-md-3 mb-4">
+        <div class="card shadow-sm border-0 rounded-4 h-100 text-center p-2 suggestion-card" style="transition:0.2s;">
+            
+            {% if s.image %}
+            <img src="{{ s.image.url }}" alt="{{ s.name }}" class="rounded-3" style="width:90%; height:200px; object-fit:cover;">
+            {% endif %}
+            
+            <div class="mt-3">
+                <h6 class="fw-semibold">{{ s.name }}</h6>
+                <p class="text-muted mb-1">Rs {{ s.price }}</p>
+
+                <form action="{% url 'cart:add_to_cart' s.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="quantity" value="1">
+                    <button class="btn btn-dark btn-sm mt-2 px-3 rounded-pill">Add to Cart</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<style>
+.cart-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+.suggestion-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+}
+</style>
+
+{% endblock %}
+

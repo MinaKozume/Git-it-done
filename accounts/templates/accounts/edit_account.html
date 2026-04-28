@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Edit Account – KAFEI{% endblock %}
+
+{% block content %}
+
+<!-- ============================ Page Styling =============================== -->
+<style>
+    body {
+        background: linear-gradient(to bottom, #FFF9F4, #F5F0E1);
+        min-height: 100vh;
+    }
+
+    .edit-card {
+        max-width: 500px;
+        margin: 40px auto;
+        background: #F5F0E1;
+        border-radius: 12px;
+        padding: 36px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        color: #4B2E2E;
+        transition: all 0.3s ease;
+    }
+
+    .edit-card:hover {
+        box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        transform: translateY(-3px);
+    }
+
+
+    .edit-card input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #4B2E2E;
+        border-radius: 8px;
+        outline: none;
+        margin-bottom: 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .edit-card input:focus {
+        border-color: #6B4226;
+        box-shadow: 0 0 5px #6B4226;
+    }
+
+    .edit-card label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .edit-card button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4B2E2E;
+        color: #FFF9F4;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .edit-card button:hover {
+        background-color: #6B4226;
+    }
+
+    .edit-card h2 {
+        margin-bottom: 25px;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+
+<!-- ============================ Banner =============================== -->
+<div style="width: 100%; height: 400px; position: relative; border-radius: 0 0 20px 20px; overflow: hidden; display: flex; align-items: flex-start; justify-content: flex-end; padding: 20px 60px 0 0; box-sizing: border-box;">
+    <img src="{% static 'accounts/images/coffeeback.jpeg' %}" alt="Banner" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; z-index:0;">
+
+    <div style="position: relative; z-index:1; color:#FFF9F4; text-align: right; display: flex; flex-direction: column; gap:8px;">
+        <h1 style="font-size: 3rem; margin:0; font-weight:bold;">Edit Profile</h1>
+        <p style="font-size:1.5rem; margin:0; font-weight:500;">Update your account details</p>
+
+        <a href="{% url 'accounts:account_detail' %}"
+           style="align-self: flex-end; padding:8px 16px; background-color:#4B2E2E; color:#FFF9F4; font-weight:bold; font-size:1rem; border-radius:6px; text-decoration:none; transition:0.3s;">
+            Back to My Account
+        </a>
+    </div>
+</div>
+
+<!-- ============================ Edit Profile Card =============================== -->
+<div class="edit-card">
+    <h2>Edit Your Profile</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+
+        {{ form.as_p }}
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+
+{% endblock %}

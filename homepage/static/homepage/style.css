@@ -1,0 +1,327 @@
+/*
+Homepage Specific Styles for KAFEI Coffee Shop
+This file contains styles that are only used on the homepage
+We use CSS variables and modern techniques for maintainability
+*/
+
+/*  HERO SECTION STYLES */
+/* This section is the first visual element users see */
+.hero-section {
+    padding: 100px 0;
+    background: linear-gradient(135deg, #3E2723 0%, #5D4037 100%); /* Coffee brown gradient background */
+    color: white;
+    margin: 0;
+    border-radius: 0; /
+}
+
+/* Main hero title styling */
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Hero subtitle w slightly smaller text */
+.hero-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+}
+
+/* Placeholder for hero image if no image is available */
+.hero-image-placeholder {
+    background: rgba(255, 255, 255, 0.1);
+    height: 300px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+/* Actual hero image styling */
+.hero-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover; /* ensures image covers area without distortion */
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Depth effect */
+}
+
+/* BUTTON STYLES */
+/* Primary button - main call-to-action */
+.btn-primary {
+    background: #8B4513; /* Coffee brown color */
+    border: none;
+    padding: 12px 30px;
+    margin-right: 10px;
+}
+
+/* Hover state for primary button */
+.btn-primary:hover {
+    background: #654321; /* Darker brown on hover */
+}
+
+/* Secondary outline button */
+.btn-outline-secondary {
+    border: 2px solid white;
+    color: white;
+    background: transparent;
+    padding: 12px 30px;
+    margin-right: 10px;
+}
+
+/* Hover state for outline button */
+.btn-outline-secondary:hover {
+    background: white;
+    color: #3E2723; /* Text becomes brown on white background */
+}
+
+/* SECTION HEADER STYLES */
+/* Container for section title and "See More" link */
+.section-header {
+    display: flex;
+    justify-content: space-between; /* Title left, link right */
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+/* Section main title */
+.section-header h2 {
+    color: #000;
+    font-size: 2rem;
+    margin: 0;
+}
+
+/* "See More" link styling - looks like text but functions as button */
+.see-more-link {
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+/* Hover state for See More link */
+.see-more-link:hover {
+    color: #8B4513; /* Change to coffee brown on hover */
+}
+
+/* MENU SECTION STYLES */
+.menu-section {
+    padding: 80px 0;
+}
+
+/* Individual menu item card */
+.menu-card {
+    cursor: pointer;               /* Makes entire card clickable */
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Hover effect for menu cards - creates a "pop out" illusion */
+.menu-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Fix accidental text selection on click */
+.menu-card * {
+    user-select: none;
+}
+
+
+/* Ensures image does not break layout */
+.card-image-wrapper {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Content area inside menu card */
+.menu-card-content {
+    padding: 20px;
+}
+
+/* Menu item name styling */
+.menu-card h4 {
+    color: #3E2723; /* Coffee brown */
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+/* Menu item description */
+.menu-card p {
+    color: #666; /* Gray text for less important info */
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+/* Price styling */
+.price {
+    color: #8B4513; 
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* MENU ITEM IMAGES */
+/* Styling for menu item images - image extends to edges */
+.menu-item-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover; /* Crops image to fit without distortion */
+    display: block;
+}
+
+/* Placeholder when no image is available */
+.image-placeholder {
+    width: 100%;
+    height: 250px;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+/* DEALS SECTION STYLES */
+.deals-section {
+    padding: 80px 0;
+    background: #f8f9fa; /* Light gray background to distinguish section */
+}
+
+/* Individual deal card */
+.deal-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover effect for deal cards */
+.deal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid #eee;
+}
+
+/* Content area inside deal card */
+.deal-card-content {
+    padding: 20px;
+}
+
+/* Deal title */
+.deal-card h4 {
+    color: #3E2723;
+    margin-bottom: 10px;
+}
+
+/* Deal description */
+.deal-card p {
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+/* Container for price information */
+.deal-prices {
+    margin-top: 10px;
+}
+
+/* Current price - emphasized */
+.price-after {
+    color: #8B4513;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Original price - crossed out to show discount */
+.price-before {
+    color: #999;
+    text-decoration: line-through;
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+/*  DEAL IMAGES */
+.deal-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+/*  REVIEWS SECTION STYLES */
+.reviews-section {
+    padding: 80px 0;
+}
+
+/* Individual review card */
+.review-card {
+    background: #f3e6d4; /* Light brown background */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e8d9c3; /* Slightly darker border */
+    height: 100%;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover effect for review cards */
+.review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e8d9c3; /* Maintain border color */
+}
+
+/* Review text with italic style for quotation feel */
+.review-text {
+    font-style: italic;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Reviewer's name styling */
+.review-author {
+    color: #8B4513; 
+    font-weight: 500;
+    margin: 0;
+}
+
+/* STAR RATING STYLES */
+.rating {
+    margin-bottom: 15px;
+}
+
+/* Base star color (empty stars) */
+.star {
+    color: #ddd;
+    font-size: 1.2rem;
+}
+
+/* Filled star color */
+.star.filled {
+    color: #FFD700; /* Gold color for filled stars */
+}
+
+/*  BOOTSTRAP UTILITY ENHANCEMENTS */
+/* Custom class for minimum height - used in hero section */
+.min-vh-50 {
+    min-height: 50vh; /* 50% of viewport height */
+}
+
+/* Additional spacing for hero content */
+.hero-content {
+    padding: 2rem 0;
+}

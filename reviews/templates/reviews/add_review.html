@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Add Review - KAFEI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'reviews/style.css' %}">
+<style>
+/* Banner Section */
+.add-review-banner {
+    position: relative;
+    background-image: url('/static/image/coffee.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    padding: 60px 20px;
+    color: white;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.add-review-banner::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 12px;
+}
+.add-review-banner h1, 
+.add-review-banner p {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+}
+.add-review-banner h1 {
+    font-size: 36px;
+    font-weight: 900;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+}
+.add-review-banner p {
+    margin-top: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+/* Form Card */
+.review-form-card {
+    max-width: 600px;
+    background-color: rgb(196,148,83);
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    margin: auto;
+    color: white;
+}
+.review-form-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 900;
+}
+.review-form-card label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+.review-form-card input[type="text"],
+.review-form-card textarea,
+.review-form-card select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+}
+.review-form-card textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+.review-form-card button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    background-color: rgb(160,120,70);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+.review-form-card button:hover {
+    background-color: rgb(140,100,60);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="add-review-banner">
+    <h1>Share Your Experience</h1>
+    <p>We’d love to hear your thoughts about our coffee.</p>
+</div>
+
+
+<div class="review-form-card">
+    <h2>Leave a Review</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="id_name">Name</label>
+        {{ form.name }}
+
+        <label for="id_rating">Rating</label>
+        {{ form.rating }}
+
+        <label for="id_comment">Comment</label>
+        {{ form.comment }}
+
+        <button type="submit">Submit Review</button>
+    </form>
+
+</div>
+
+<div style="text-align:center; margin-top: 30px; display: flex; justify-content: center; gap: 15px;">
+
+
+    <a href="{% url 'reviews:reviews' %}" class="back-btn">Back</a>
+</div>
+
+{% endblock %}

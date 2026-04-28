@@ -1,0 +1,165 @@
+/* Quote Banner */
+.quote-banner {
+    position: relative;
+    background-image: url('/static/image/coffee.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.quote-banner::before {
+    content: "";
+    position: absolute;
+    top:0; left:0; right:0; bottom:0;
+    background-color: rgb(255, 252, 252);
+    border-radius: 12px;
+}
+
+.quote-banner-content {
+    position: relative;
+    z-index: 1;
+}
+
+.quote-banner-content h1 {
+    font-size: 36px;
+    font-weight: 900;
+    text-shadow: 2px 2px 6px rgb(255, 255, 255);
+}
+
+.quote-banner-content p {
+    max-width: 600px;
+    margin: 10px auto;
+    font-size: 17px;
+    font-weight: 700;
+    text-shadow: 1px 1px 4px rgb(255, 255, 255);
+}
+
+/* Recent Feedbacks */
+.recent-feedbacks h2 {
+    margin-bottom: 10px;
+}
+
+.feedback-hr {
+    width: 220px;
+    margin: 0;
+    border: 1px solid #000;
+}
+
+/* Carousel */
+.cards-container {
+    position: relative; /* parent for absolute buttons */
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.cards-wrapper {
+    display: flex;
+    transition: 0.5s ease;
+}
+
+.carousel-btn {
+    position: absolute; /* position relative to container */
+    top: 50%; /* vertical center */
+    transform: translateY(-50%);
+    font-size: 30px;
+    background: rgba(0,0,0,0.3);
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+/* Review Card */
+.review-card {
+    min-width: 280px;
+    background-color: rgb(196,148,83); /* creme background */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 0 10px;
+    text-align: center;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.review-avatar {
+    width: 40px;
+    height: 40px;
+    background: #ccc;
+    border-radius: 50%;
+}
+
+.review-stars {
+    margin-top: 10px;
+}
+
+.review-stars .filled {
+    color: gold;
+    font-size: 18px;
+}
+
+.review-stars .empty {
+    color: rgba(255,255,255,0.5);
+    font-size: 18px;
+}
+
+.review-date {
+    text-align: right;
+    opacity: 0.8;
+    margin-top: 15px;
+}
+
+/* View More Button */
+.view-more {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.view-more a {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+}
+
+/* CTA Section */
+.cta-review {
+    padding: 60px 20px;
+    text-align: center;
+    max-width: 700px;
+    margin: auto;
+}
+
+.cta-review p {
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+.cta-btn {
+    display: inline-block;
+    background: black;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 4px;
+    text-decoration: none;
+}
