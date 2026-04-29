@@ -5,6 +5,13 @@ from deals.models import Deal
 from .models import CartItem
 from django.http import JsonResponse
 import random
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .models import CartItem
+from .serializers import CartItemSerializer
+from menu.models import MenuItem
+from deals.models import Deal
 
 # -------------------------
 # ADD MENU ITEM TO CART
@@ -122,3 +129,52 @@ def remove_from_cart(request, item_id):
     item = get_object_or_404(CartItem, id=item_id, user=request.user)
     item.delete()
     return redirect("cart:view_cart")
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def cart_list_api(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+    serializer = CartItemSerializer(cart_items, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_to_cart_api(request):
+    item_type = request.data.get("item_type")
+    item_id = request.data.get("item_id")
+    quantity = int(request.data.get("quantity", 1))
+
+    if item_type == "MENU":
+        product = MenuItem.objects.get(id=item_id)
+        cart_item, created = CartItem.objects.get_or_create(
+            user=request.user,
+            product=product,
+            item_type="MENU",
+            defaults={"quantity": quantity}
+        )
+
+    elif item_type == "DEAL":
+        deal = Deal.objects.get(id=item_id)
+        cart_item, created = CartItem.objects.get_or_create(
+            user=request.user,
+            deal=deal,
+            item_type="DEAL",
+            defaults={"quantity": quantity}
+        )
+
+    else:
+        return Response({"error": "Invalid item type"}, status=400)
+
+    if not created:
+        cart_item.quantity += quantity
+        cart_item.save()
+
+    return Response({"message": "Item added to cart"})
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def remove_from_cart_api(request, item_id):
+    item = CartItem.objects.get(id=item_id, user=request.user)
+    item.delete()
+    return Response({"message": "Item removed"})

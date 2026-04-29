@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, MenuItem
+from rest_framework.generics import ListAPIView
+from .models import MenuItem
+from .serializers import MenuItemSerializer
 
 def menu_page(request):
     categories = Category.objects.filter(is_active=True)
@@ -54,3 +57,8 @@ def menu_item_detail(request, item_id):
     return render(request, 'menu/menu_item_detail.html', {'item': item})
 
 
+
+
+class MenuListAPI(ListAPIView):
+    queryset = MenuItem.objects.filter(is_active=True)
+    serializer_class = MenuItemSerializer

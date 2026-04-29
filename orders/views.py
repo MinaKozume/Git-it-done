@@ -3,6 +3,10 @@ from django.contrib.auth.decorators import login_required
 from cart.models import CartItem
 from deals.models import Deal
 from .models import Order, OrderItem, BankPaymentDetails, CashPickupDetails
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
+from .models import Order
+from .serializers import OrderSerializer
 
 
 @login_required
@@ -107,3 +111,14 @@ def order_now_deal(request, deal_id):
 
 
     return redirect("orders:checkout")
+
+
+
+
+
+class OrderListAPI(ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).order_by('-created_at')

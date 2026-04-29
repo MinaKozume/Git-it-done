@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Deal, Category
 from cart.views import add_deal_to_cart  
 from datetime import date
+from rest_framework.generics import ListAPIView
+from .models import Deal
+from .serializers import DealSerializer
 
 def deals(request):
     today = date.today()
@@ -25,3 +28,10 @@ def order_now_deal(request, deal_id):
     deal = get_object_or_404(Deal, id=deal_id, is_active=True)
     add_deal_to_cart(request, deal.id)  
     return redirect('orders:checkout')
+
+
+
+
+class DealAPI(ListAPIView):
+    queryset = Deal.objects.filter(is_active=True)
+    serializer_class = DealSerializer

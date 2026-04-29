@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect  
 from .models import FAQ
 from .forms import ContactUsForm
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import FAQ
+from .serializers import FAQSerializer
 
 def about(request):
 
@@ -19,3 +23,17 @@ def about(request):
         'coffee_shop_name': coffee_shop_name,
         'user': request.user
     })
+
+
+
+class AboutAPI(APIView):
+    def get(self, request):
+
+        faqs = FAQ.objects.all()
+        serializer = FAQSerializer(faqs, many=True)
+
+        return Response({
+            "app_name": "KAFEI",
+            "description": "Coffee ordering mobile app with menu, cart, deals and delivery system.",
+            "faqs": serializer.data
+        })

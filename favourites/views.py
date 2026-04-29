@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from menu.models import MenuItem
 from .models import FavouriteItem
+from rest_framework.generics import ListCreateAPIView, DestroyAPIView
+from rest_framework.permissions import IsAuthenticated
+from .models import FavouriteItem
+from .serializers import FavouriteSerializer
 
 @login_required
 def view_favourites(request):
@@ -19,3 +23,24 @@ def remove_from_favourites(request, item_id):
     item = get_object_or_404(FavouriteItem, id=item_id, user=request.user)
     item.delete()
     return redirect("favourites:view_favourites")
+
+
+
+
+class FavouriteListCreateAPI(ListCreateAPIView):
+    serializer_class = FavouriteSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return FavouriteItem.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class FavouriteDeleteAPI(DestroyAPIView):
+    serializer_class = FavouriteSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return FavouriteItem.objects.filter(user=self.request.user)

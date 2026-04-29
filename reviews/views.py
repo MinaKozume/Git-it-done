@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.db.models import Avg
 from .models import Review
 from .forms import ReviewForm  
+from rest_framework.generics import ListCreateAPIView
+from .models import Review
+from .serializers import ReviewSerializer
 
 def reviews_list(request):
     
@@ -47,3 +50,9 @@ def reviews_full_list(request):
         "average_rating": round(average_rating, 1),
     }
     return render(request, 'reviews/reviews_full_list.html', context)
+
+
+
+class ReviewAPI(ListCreateAPIView):
+    queryset = Review.objects.all().order_by('-date')
+    serializer_class = ReviewSerializer
