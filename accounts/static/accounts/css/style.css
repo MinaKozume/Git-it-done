@@ -1,0 +1,331 @@
+/* ============================ Page Setup ============================ */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+}
+
+/* Full-page blurred background */
+body.login-page::before,
+body.signup-page::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("../images/coffee-beans.jpeg") center/cover no-repeat;
+    filter: blur(12px) brightness(0.85);
+    transform: scale(1.05);
+    z-index: -1;
+}
+
+/* ============================ Login ============================ */
+/* Container for login */
+.login-container {
+    display: flex;
+    min-height: 70vh;
+    max-width: 1200px;
+    margin: 50px auto;
+    box-shadow: 0 6px 25px rgba(221, 217, 217, 0.2);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Left image (desktop only) */
+.login-image {
+    flex: 1.2;
+    display: none; /* hidden on small screens */
+    min-height: 100%; /* make it fill container height */
+    background-image: url("../images/coffee.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Right login form */
+.login-form {
+    flex: 1;
+    background: #F5F1E9; /* cream form background */
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Welcome + logo */
+.welcome-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.welcome-logo img {
+    height: 40px;
+    width: auto;
+}
+
+.welcome-logo span {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: #6B4C3B;
+}
+
+.login-form h2 {
+    margin-bottom: 30px;
+    font-family: 'Playfair Display', serif;
+    color: #6B4C3B;
+    text-align: center;
+}
+
+.login-form label {
+    font-weight: 500;
+    margin-top: 15px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #C9A66B;
+    box-shadow: 0 0 6px rgba(201,166,107,0.5);
+}
+
+.login-form button {
+    margin-top: 25px;
+    padding: 14px;
+    background-color: #C9A66B;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.login-form button:hover {
+    background-color: #b68e4f;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+}
+
+.login-form .text-center a {
+    color: #6B4C3B;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.login-form .text-center a:hover {
+    text-decoration: underline;
+}
+
+/* ============================ Signup ============================ */
+/* Split container */
+.signup-container {
+    display: flex;
+    max-width: 1200px;
+    height: 80vh;
+    margin: 50px auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+
+/* Left form side */
+.signup-form-side {
+    flex: 1.2;
+    background: rgba(255, 245, 230, 0.95);
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #5C3A21;
+    border-radius: 15px 0 0 15px;
+}
+
+.signup-form-side h2 {
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #6B4C3B;
+}
+
+.signup-form-side form input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border: 1px solid #D9B38C;
+    border-radius: 6px;
+    transition: 0.3s;
+    background: #FFF8F0;
+    color: #5C3A21;
+    font-size: 14px;
+}
+
+.signup-form-side form input::placeholder {
+    color: #C9A66B;
+}
+
+.signup-form-side form input:focus {
+    outline: none;
+    border-color: #C9A66B;
+    box-shadow: 0 0 5px rgba(201,166,107,0.5);
+    background: #FFF5E6;
+}
+
+.signup-form-side .input-info {
+    font-size: 12px;
+    color: #8B6E50;
+    margin-top: 3px;
+    margin-bottom: 8px;
+}
+
+.signup-form-side .btn-primary {
+    margin-top: 18px;
+    width: 100%;
+    padding: 14px;
+    background-color: #C9A66B;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.signup-form-side .btn-primary:hover {
+    background-color: #b68e4f;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+.signup-form-side p {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.signup-form-side p a {
+    color: #C9A66B;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.signup-form-side p a:hover {
+    text-decoration: underline;
+}
+
+/* Right side: welcome + guest */
+.signup-info-side {
+    flex: 0.8;
+    background: rgba(60, 40, 30, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 25px;
+    text-align: center;
+    color: #FFD8A9;
+    border-radius: 0 15px 15px 0;
+}
+
+.signup-info-side h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    margin-bottom: 15px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.signup-info-side p {
+    font-size: 16px;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+}
+
+.signup-info-side .btn-secondary {
+    padding: 14px 22px;
+    border: 2px solid #FFD8A9;
+    border-radius: 6px;
+    background: none;
+    color: #FFD8A9;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.signup-info-side .btn-secondary:hover {
+    background-color: rgba(255,216,169,0.25);
+}
+
+/* ============================ Responsive ============================ */
+@media (min-width: 768px) {
+    .login-image {
+        display: block;
+    }
+}
+
+@media (max-width: 900px) {
+    .signup-container {
+        flex-direction: column;
+        height: auto;
+    }
+    .signup-form-side, .signup-info-side {
+        flex: unset;
+        width: 90%;
+        margin: 10px auto;
+    }
+    .signup-info-side h2 {
+        font-size: 28px;
+    }
+    .signup-info-side p {
+        font-size: 14px;
+    }
+    .signup-form-side h2 {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 767px) {
+    .login-container {
+        flex-direction: column;
+        max-width: 90%;
+        min-height: auto;
+    }
+
+    .login-image {
+        flex: unset;
+        height: 200px;
+    }
+
+    .login-form {
+        padding: 40px 30px;
+    }
+}
+
+/* ============================ Order Item + Status Stamp ============================ */
+.order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative; /* needed for absolute stamp */
+    padding: 4px 0;
+    color: #4B2E2E;
+}
+
+
+

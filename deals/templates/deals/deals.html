@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}KAFEI — Deals{% endblock %}
+
+{% block content %}
+
+<style>
+    .navbar-custom {
+        position: sticky;
+        top: 0;
+        z-index: 9999;
+    }
+    
+    /* Hero */
+    .hero {
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        background: url('{% static "deals/images/banner_picture.jpeg" %}') center/cover no-repeat;
+        color: white;
+        text-align: center;
+        padding: 200px 20px 150px;
+        position: relative;
+    }
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 0;
+    }
+    .hero-content { position: relative; z-index: 1; }
+
+    /* Deals cards */
+    .deal-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s;
+    }
+    .deal-card:hover { transform: translateY(-5px); }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .btn-dark { background-color: #000; border: none; }
+    .btn-dark:hover { background-color: #333; }
+    .btn-outline-secondary { border-radius: 5px; }
+</style>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 class="display-3">KAFEI</h1>
+        <p>Discover our freshest deals and limited edition combos.</p>
+        <a href="#deals-section" class="btn btn-dark mt-3">See Deals</a>
+    </div>
+</section>
+
+<!-- MAIN DEALS SECTION -->
+<div class="container-fluid my-5 px-5" id="deals-section">
+    {% for category, deals in category_deals.items %}
+        {% if deals %}
+            <h2 class="mb-4">{{ category }}</h2>
+
+            <div class="row g-4 mb-5">
+
+                {% for deal in deals %}
+                <div class="col-md-4">
+                    <div class="card deal-card h-100 shadow-sm">
+
+                        {% if deal.image %}
+                        <img src="{{ deal.image.url }}" class="card-img-top" alt="{{ deal.title }}">
+                        {% endif %}
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ deal.title }}</h5>
+                            <p class="card-text">{{ deal.description }}</p>
+
+                            {% if deal.price_before %}
+                                <p><del>Rs {{ deal.price_before }}</del> <strong>Rs {{ deal.price_after }}</strong></p>
+                            {% else %}
+                                <p><strong>Rs {{ deal.price_after }}</strong></p>
+                            {% endif %}
+
+                            <!-- Only Add to Cart button -->
+                            <form class="deal-add-to-cart-form" action="{% url 'cart:add_deal_to_cart' deal.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-secondary">Add to Cart</button>
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<!-- ADDED TO CART POPUP -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="cartToast" class="toast align-items-center text-white bg-success border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body">
+                Item added to cart!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+// Handle Add to Cart form submission via AJAX
+document.querySelectorAll(".deal-add-to-cart-form").forEach(form => {
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+        let actionUrl = this.action;
+
+        fetch(actionUrl, {
+            method: "POST",
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success toast
+                let toastEl = document.getElementById("cartToast");
+                let toast = new bootstrap.Toast(toastEl, {
+                    animation: true,
+                    autohide: true,
+                    delay: 2000
+                });
+                toast.show();
+            } else {
+                alert("Error adding deal to cart.");
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Error adding deal to cart.");
+        });
+    });
+});
+</script>
+
+
+{% endblock %}
+
