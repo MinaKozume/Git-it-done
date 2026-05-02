@@ -23,56 +23,12 @@
 <!-- CATEGORY PREVIEW -->
 <div class="container my-5">
     <h2 class="text-center mb-4">Categories</h2>
-    <div class="row text-center">
-        {% for cat in categories %}
-        <div class="col-6 col-md-3 mb-4">
-            <a href="#cat-{{ cat.id }}" class="text-decoration-none text-dark">
-                <div class="card">
-                    {% if cat.image %}
-                        <img src="{{ cat.image.url }}" class="card-img-top" style="height: 120px; object-fit: cover;">
-                    {% endif %}
-                    <div class="card-body p-2">
-                        <h6>{{ cat.name }}</h6>
-                    </div>
-                </div>
-            </a>
-        </div>
-        {% endfor %}
-    </div>
+    <div class="row text-center" id="categories-container"></div>
 </div>
 
 <!-- MAIN MENU -->
 <div class="container" id="menu-section">
-    {% for category, items in items_by_category.items %}
-        <h3 id="cat-{{ category.id }}" class="mt-5">{{ category.name }}</h3>
-
-        <!-- Show ALL items -->
-        <div class="scroll-container" id="scroll-{{ category.id }}">
-            {% for item in items %}
-            <div class="card scroll-item">
-                {% if item.image %}
-                    <img src="{{ item.image.url }}" class="card-img-top">
-                {% endif %}
-                <div class="card-body">
-                    <div>
-                        <h5>{{ item.name }}</h5>
-                        <p>{{ item.description }}</p>
-                        <p class="fw-bold">Rs {{ item.price }}</p>
-                    </div>
-
-                    <div class="d-flex gap-2 mt-2">
-                        <form class="add-to-cart-form" action="{% url 'cart:add_to_cart' item.id %}" method="POST">
-                            {% csrf_token %}
-                            <button class="btn btn-dark-brown" style="white-space: nowrap;">Add to Cart</button>
-                        </form>
-                        <a href="{% url 'menu:menu_item_detail' item_id=item.id %}" class="btn btn-light-cream" style="white-space: nowrap;">View Details</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-    {% endfor %}
+    <div id="menu-container"></div>
 </div>
 
 <!-- ADDED TO CART POPUP -->
@@ -142,40 +98,137 @@
 </style>
 
 <script>
-document.querySelectorAll(".add-to-cart-form").forEach(form => {
-    form.addEventListener("submit", function(e) {
-        e.preventDefault();
+fetch("/menu/api/")
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
 
-        let formData = new FormData(this);
-        let actionUrl = this.action;
+        const categoriesContainer = document.getElementById("categories-container");
+        const menuContainer = document.getElementById("menu-container");
 
-        fetch(actionUrl, {
-            method: "POST",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                let toastEl = document.getElementById("cartToast");
-                let toast = new bootstrap.Toast(toastEl, {
-                    animation: true,
-                    autohide: true,
-                    delay: 2000 
-                });
-                toast.show();
-            } else {
-                alert("Error adding item to cart.");
+        const grouped = {};
+
+        data.forEach(item => {
+            const categoryId = item.category.id;
+            const categoryName = item.category.name;
+            const categoryImage = item.category.image;
+
+            if (!grouped[categoryId]) {
+                grouped[categoryId] = {
+                    name: categoryName,
+                    image: categoryImage,
+                    items: []
+                };
             }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Error adding item to cart.");
+
+            grouped[categoryId].items.push(item);
         });
+
+        Object.entries(grouped).forEach(([catId, category]) => {
+
+            categoriesContainer.innerHTML += `
+                <div class="col-6 col-md-3 mb-4">
+                    <a href="#cat-${catId}" class="text-decoration-none text-dark">
+                        <div class="card">
+                            ${category.image ? `
+                                <img src="${category.image}" 
+                                     class="card-img-top" 
+                                     style="height: 120px; object-fit: cover;">
+                            ` : ""}
+                            <div class="card-body p-2">
+                                <h6>${category.name}</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `;
+
+            let itemsHTML = `
+                <h3 id="cat-${catId}" class="mt-5">${category.name}</h3>
+                <div class="scroll-container">
+            `;
+
+            category.items.forEach(item => {
+                itemsHTML += `
+                    <div class="card scroll-item">
+                        ${item.image ? `
+                            <img src="${item.image}" class="card-img-top">
+                        ` : ""}
+
+                        <div class="card-body">
+                            <div>
+                                <h5>${item.name}</h5>
+                                <p>${item.description}</p>
+                                <p class="fw-bold">Rs ${item.price}</p>
+                            </div>
+
+                            <div class="d-flex gap-2 mt-2">
+                                <button class="btn btn-dark-brown"
+                                    onclick="addToCart(${item.id})">
+                                    Add to Cart
+                                </button>
+
+                                <a href="/menu/item/${item.id}/"
+                                   class="btn btn-light-cream">
+                                   View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            itemsHTML += `</div>`;
+
+            menuContainer.innerHTML += itemsHTML;
+        });
+    })
+    .catch(error => {
+        console.error("Menu API Error:", error);
     });
-});
+
+
+function addToCart(id) {
+    const token = localStorage.getItem("token");
+    
+    if (!token) {
+        alert("Please login first");
+        window.location.href = "/accounts/login/";
+        return;
+    }
+    
+    fetch("/cart/api/add/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({
+            item_type: "MENU",
+            item_id: id,
+            quantity: 1
+        })
+    })
+    .then(res => {
+        if (res.status === 401) {
+            throw new Error("Session expired. Please login again.");
+        }
+        return res.json();
+    })
+    .then(data => {
+        let toastEl = document.getElementById("cartToast");
+        let toast = new bootstrap.Toast(toastEl, {
+            animation: true,
+            autohide: true,
+            delay: 2000
+        });
+        toast.show();
+    })
+    .catch(err => {
+        console.error(err);
+        alert(err.message);
+    });
+}
 </script>
 
 {% endblock %}

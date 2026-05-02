@@ -104,6 +104,64 @@
     box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
 }
 </style>
+<script>
+// ADD THIS - Load "You May Like" suggestions from API
+document.addEventListener('DOMContentsLoaded', function() {
+    const youMayLikeSection = document.querySelector('.you-may-like-section');
+    if (!youMayLikeSection) return;
+    
+    fetch('/menu/api/')
+        .then(res => res.json())
+        .then(data => {
+            // Get 4 random items not in cart
+            const suggestions = data.slice(0, 4);
+            let html = '<hr class="my-5"><h3 class="mt-4 mb-3 fw-bold">You may like</h3><div class="row">';
+            
+            suggestions.forEach(item => {
+                html += `
+                    <div class="col-md-3 mb-4">
+                        <div class="card shadow-sm border-0 rounded-4 h-100 text-center p-2">
+                            ${item.image ? `<img src="${item.image}" class="rounded-3" style="width:90%; height:200px; object-fit:cover;">` : ''}
+                            <div class="mt-3">
+                                <h6 class="fw-semibold">${item.name}</h6>
+                                <p class="text-muted mb-1">Rs ${item.price}</p>
+                                <button class="btn btn-dark btn-sm mt-2 px-3 rounded-pill" onclick="suggestedAddToCart(${item.id})">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            youMayLikeSection.innerHTML = html;
+        })
+        .catch(err => console.error('API error:', err));
+});
 
+function suggestedAddToCart(itemId) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/accounts/login/';
+        return;
+    }
+    
+    fetch('/cart/api/add/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+            item_type: 'MENU',
+            item_id: itemId,
+            quantity: 1
+        })
+    })
+    .then(res => res.json())
+    .then(() => window.location.reload());
+}
+</script>
+
+<!-- Add this div where you want API suggestions to appear -->
+<div class="you-may-like-section"></div>
 {% endblock %}
 

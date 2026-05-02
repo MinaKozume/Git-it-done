@@ -50,4 +50,39 @@
 
     </div>
 </div>
+<script>
+// ADD THIS - Store JWT token when login succeeds
+document.addEventListener('DOMContentLoaded', function() {
+    const originalForm = document.querySelector('form');
+    
+    if (originalForm) {
+        originalForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = originalForm.querySelector('input[name="username"]').value;
+            const password = originalForm.querySelector('input[name="password"]').value;
+            
+            fetch('/api/token/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username: username, password: password})
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.access) {
+                    localStorage.setItem('token', data.access);
+                    // Now submit the original form normally
+                    originalForm.submit();
+                } else {
+                    alert('Invalid username or password');
+                }
+            })
+            .catch(err => {
+                console.error('Login API error:', err);
+                originalForm.submit(); // Fallback to normal login
+            });
+        });
+    }
+});
+</script>
 {% endblock %}
